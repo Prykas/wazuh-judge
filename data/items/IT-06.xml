@@ -1,0 +1,17 @@
+<!-- IT-06 | N6 | Nativa Wazuh | rule_id: 40101 -->
+<!-- Sem defeito — caso de referencia calibrado corretamente -->
+<!-- Replay: 12/12 disparos manual=alto -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="40101" level="12">
+    <if_sid>5715</if_sid>
+    <match>^Accepted</match>
+    <user>^(?!root$)</user>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>System user successfully logged to the system from external IP</description>
+    <group>authentication_success,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+  </rule>
+
+</group>
