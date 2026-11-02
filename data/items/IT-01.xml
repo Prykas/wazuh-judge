@@ -1,0 +1,13 @@
+<!-- IT-01 | N1 | Nativa Wazuh | rule_id: 5715 -->
+<!-- Defeitos: severidade_incompativel_subestimacao, ruido_sem_supressao -->
+<!-- Replay: 197/198 disparos manual=nenhum -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="5715" level="3">
+    <if_sid>5716</if_sid>
+    <match>^Accepted</match>
+    <description>sshd: authentication success</description>
+    <group>authentication_success,pci_dss_10.2.5,gpg13_7.1,gpg13_7.2,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,</group>
+  </rule>
+
+</group>
