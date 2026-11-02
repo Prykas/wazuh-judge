@@ -1,0 +1,33 @@
+<!--
+  CAL-06 | Regra de calibração — FORA DO DATASET
+  Comportamento: Login anômalo de usuário comum de IP externo
+  Uso metodológico: Exemplo C4 Parcialmente Adequado — nível high para
+                    tentativa sem agravante de volume ou conta privilegiada;
+                    1 faixa acima do esperado pela tabela de decisão
+  Defeito semeado: nível 10 (high) para o que seria medium pela tabela P1–P4
+-->
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199007" level="10">
+    <if_sid>5715</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <user>!root</user>
+    <description>sshd: login bem-sucedido de usuário comum de IP externo (origem geográfica anômala)</description>
+    <group>authentication_success,external_source</group>
+    <comment>
+      Regra de calibração CAL-06.
+      C4 Parcialmente Adequado: pela tabela de decisão ACME-LAB:
+        - Base: impacto efetivo → high (faixa 9-12)
+        - Agravante P2: origem externa → sobe para critical (faixa 13-16)
+        - Sem P4 (usuário comum, não privilegiado)
+      Nível 10 está na faixa high, mas a tabela indicaria critical (13+)
+      com agravante P2. Distância = 1 faixa → PA.
+      Avaliador deve identificar que P2 está presente (IP externo negado
+      nas três faixas privadas) e que o nível 10 não alcança critical.
+      Exemplo de C4 PA com justificativa baseada em distância de faixa.
+    </comment>
+  </rule>
+
+</group>

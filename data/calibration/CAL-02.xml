@@ -1,0 +1,26 @@
+<!--
+  CAL-02 | Regra de calibração — FORA DO DATASET
+  Comportamento: Múltiplas falhas SSH de origem externa (brute force simples)
+  Uso metodológico: Exemplo C4 Parcialmente Adequado — nível plausível mas
+                    conservador para tentativas correlacionadas sem agravante adicional
+  Defeito: Nenhum estrutural; C4 PA porque nível 7 (medium-alto) é aceitável
+           mas poderia ser 9 (high) se P3 (volume) for considerado agravante
+-->
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199002" level="7" frequency="6" timeframe="120">
+    <if_matched_sid>5716</if_matched_sid>
+    <same_srcip />
+    <description>sshd: múltiplas falhas de autenticação do mesmo IP (possível brute force)</description>
+    <group>authentication_failed,brute_force</group>
+    <comment>
+      Regra de calibração CAL-02.
+      C4 Parcialmente Adequado: nível 7 (medium) para brute force correlacionado
+      é plausível — 6 falhas em 2 minutos sugere automação, mas sem confirmação
+      de impacto efetivo. Distância de 1 faixa do esperado (high seria mais
+      conservador dado P3 volume/persistência). Avaliador deve identificar a
+      ambiguidade e classificar PA com justificativa do agravante P3.
+    </comment>
+  </rule>
+
+</group>

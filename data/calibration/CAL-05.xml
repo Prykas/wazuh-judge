@@ -1,0 +1,28 @@
+<!--
+  CAL-05 | Regra de calibração — FORA DO DATASET
+  Comportamento: Falha de sudo com janela temporal implausível
+  Uso metodológico: Exemplo C3 Inadequado — timeframe=30s contradiz o
+                    comportamento que a regra declara detectar
+  Defeito semeado: timeframe propositalmente curto (30s) para calibração
+-->
+<group name="syslog,sudo,acme-lab-cal">
+
+  <rule id="199006" level="8" frequency="3" timeframe="30">
+    <if_sid>5401</if_sid>
+    <same_user />
+    <description>sudo: múltiplas falhas de autenticação do mesmo usuário (possível ataque de força bruta em credenciais sudo)</description>
+    <group>authentication_failed,sudo,brute_force</group>
+    <comment>
+      Regra de calibração CAL-05.
+      C3 Inadequado: timeframe=30s é implausível para detectar brute force
+      em credenciais sudo. Um atacante que testa senhas manualmente ou com
+      ferramenta de baixa velocidade para evitar bloqueio levaria minutos entre
+      tentativas. A janela de 30 segundos capturaria apenas erros de digitação
+      consecutivos do próprio usuário legítimo, não um ataque real.
+      Timeframe adequado para este comportamento seria 300s a 600s.
+      Defeito de calibração intencional: avaliador deve identificar e
+      classificar C3 como Inadequado com justificativa da janela temporal.
+    </comment>
+  </rule>
+
+</group>

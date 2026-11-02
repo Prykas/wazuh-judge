@@ -1,0 +1,19 @@
+# Modelos utilizados - preencher com versoes exatas na execucao
+models:
+  - key: claude
+    provider: anthropic
+    id: preencher-na-execucao
+    temperature: 0
+    interface: web
+
+  - key: chatgpt
+    provider: openai
+    id: preencher-na-execucao
+    temperature: 0
+    interface: web
+
+  - key: gemini
+    provider: google
+    id: preencher-na-execucao
+    temperature: 0
+    interface: web

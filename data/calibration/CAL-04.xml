@@ -1,0 +1,29 @@
+<!--
+  CAL-04 | Regra de calibração — FORA DO DATASET
+  Comportamento: Login root bem-sucedido de IP externo em conta privilegiada
+  Uso metodológico: Exemplo C4 Adequado — critical correto para impacto
+                    efetivo com agravantes P2 (geo anômala) e P4 (conta root)
+  Defeito: Nenhum
+-->
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199005" level="13">
+    <if_sid>5715</if_sid>
+    <user>root</user>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>sshd: login root bem-sucedido de IP externo (impacto efetivo + origem anômala + conta privilegiada)</description>
+    <group>authentication_success,privilege_escalation,external_source</group>
+    <comment>
+      Regra de calibração CAL-04.
+      C4 Adequado: nível 13 (critical) é correto pela tabela de decisão:
+        - Base: impacto efetivo → high (faixa 9-12)
+        - Agravante P2: origem geográfica externa → sobe para critical (faixa 13-16)
+        - Agravante P4: conta root → confirma critical
+      Distância = 0. Avaliador deve atribuir A em C4 e identificar os dois
+      agravantes na justificativa com citação do XML (user=root, srcip negado).
+    </comment>
+  </rule>
+
+</group>

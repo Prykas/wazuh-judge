@@ -1,0 +1,23 @@
+<!--
+  CAL-01 | Regra de calibração — FORA DO DATASET
+  Comportamento: Login de conta de serviço em horário comercial (rotina esperada)
+  Uso metodológico: Exemplo C5 Adequado — condições específicas limitam ruído
+  Defeito: Nenhum
+-->
+<group name="pam,authentication,acme-lab-cal">
+
+  <rule id="199001" level="3">
+    <if_sid>5501</if_sid>
+    <user>backup|nagios|zabbix|prometheus</user>
+    <time>08:00-18:00</time>
+    <description>PAM: sessão de conta de serviço em horário comercial (rotina esperada)</description>
+    <group>authentication_success,low_noise</group>
+    <comment>
+      Regra de calibração CAL-01.
+      C5 Adequado: restrição por usuário (contas de serviço conhecidas) e por horário
+      comercial reduz o universo de disparos a eventos genuinamente esperados.
+      Sem necessidade de regra filha nível 0 porque as condições já filtram o ruído.
+    </comment>
+  </rule>
+
+</group>

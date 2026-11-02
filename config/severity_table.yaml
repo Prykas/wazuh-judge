@@ -1,0 +1,24 @@
+# Tabela de decisao C4 - convencao deste estudo
+# PPGES - UNIPAMPA - LIAA
+
+bands:
+  low:      [1,  4]
+  medium:   [5,  8]
+  high:     [9,  12]
+  critical: [13, 16]
+
+base:
+  attempt:          medium
+  effective_impact: high
+
+aggravators:
+  - P2_anomalous_geo
+  - P3_volume_persistence
+  - P4_privileged_account
+
+cap: critical
+
+label_rule:
+  A:  distance == 0
+  PA: distance == 1
+  I:  distance >= 2 or contradicts_principle
