@@ -1,0 +1,19 @@
+<!-- IT-18 | C1 | Controle | Sem defeito -->
+<!-- Login SSH bem-sucedido de IP externo — critical correto -->
+<!-- P1: impacto efetivo + P2: origem anomala = critical -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100003" level="13">
+    <if_sid>5715</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <user>!root</user>
+    <description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais</description>
+    <group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+    <!-- Sem defeito: P1 (impacto efetivo=high) + P2 (geo anomala=+1) = critical -->
+    <!-- Nivel 13 correto pela tabela de decisao -->
+    <!-- Lógica de correspondencia correta: sem over-match nem under-match -->
+  </rule>
+
+</group>
