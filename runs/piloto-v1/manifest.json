@@ -1,0 +1,14 @@
+{
+  "run_id": "piloto-v1",
+  "run_name": "Piloto nas regras de calibracao",
+  "run_type": "piloto",
+  "condition": "E1",
+  "items": ["CAL-01", "CAL-02", "CAL-03", "CAL-04", "CAL-05", "CAL-06"],
+  "models": ["gemini", "chatgpt", "claude"],
+  "reps": 1,
+  "started_at": "2026-11-02",
+  "prompt_version": "E1_single_judge_v1.0",
+  "rubric_version": "rubric_evaluator_v1.0",
+  "notes": "Piloto para validar prompt e rubrica antes do congelamento com hash",
+  "status": "em_andamento"
+}
