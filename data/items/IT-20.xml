@@ -1,0 +1,18 @@
+<!-- IT-20 | C3 | Controle | Sem defeito -->
+<!-- Password spraying: mesmo usuario, multiplas origens -->
+<!-- Correlacao correta: same_user + different_srcip, threshold plausivel -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100008" level="12" frequency="6" timeframe="600">
+    <if_matched_sid>5716</if_matched_sid>
+    <same_user />
+    <different_srcip />
+    <description>Password spraying SSH: multiplas falhas no mesmo usuario de origens distintas</description>
+    <group>authentication_failed,brute_force,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- Sem defeito: -->
+    <!-- C2: same_user + different_srcip captura exatamente password spraying -->
+    <!-- C3: frequency=6, timeframe=600s plausivel; agrupamento correto -->
+    <!-- C4: tentativa + P3 (volume 6 falhas) = medium+1 = high; nivel 12 correto -->
+  </rule>
+
+</group>
