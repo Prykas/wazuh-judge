@@ -1,0 +1,16 @@
+<!-- IT-12 | S6 | Gerada SBSeg | rule_id: 100021 -->
+<!-- Sem defeito — controle C2 do SBSeg -->
+<!-- Login em conta de sistema = critical correto (P1 + P4) -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100021" level="14">
+    <if_sid>5715</if_sid>
+    <user>daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch</user>
+    <description>Bloco 4 - Contas sistema: Login interativo em conta sem shell</description>
+    <group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+    <!-- P1: impacto efetivo = high base -->
+    <!-- P4: conta de sistema = +1 faixa = critical -->
+    <!-- Sem defeito: nivel 14 correto pela tabela de decisao -->
+  </rule>
+
+</group>
