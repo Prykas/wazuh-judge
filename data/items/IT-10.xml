@@ -1,0 +1,18 @@
+<!-- IT-10 | S4 | Gerada SBSeg | rule_id: 100007 -->
+<!-- Defeito: correlacao_sem_garantia_temporal -->
+<!-- if_matched_sid + if_sid nao garante ordem cronologica no motor -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100007" level="14">
+    <if_matched_sid>100001</if_matched_sid>
+    <if_sid>5715</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Bloco 2 - Correlacao: Credential stuffing — falha seguida de sucesso de IP externo</description>
+    <group>authentication_success,brute_force,external_source,pci_dss_10.2.4,pci_dss_10.2.5,gdpr_IV_35.7.d,</group>
+    <!-- DEFEITO: motor Wazuh nao garante que if_matched_sid -->
+    <!-- (falha) ocorreu antes de if_sid (sucesso) -->
+  </rule>
+
+</group>
