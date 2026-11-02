@@ -1,0 +1,18 @@
+<!-- IT-07 | S1 | Gerada SBSeg | rule_id: 100001 -->
+<!-- Defeito: severidade_incompativel_superescalonamento -->
+<!-- Nivel 10 (high) para tentativa malsucedida viola P1 -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100001" level="10">
+    <if_sid>5716</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Bloco 1 - Geo: Falha SSH de IP externo fora faixas institucionais</description>
+    <group>authentication_failed,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- P1: impacto efetivo pesa mais que tentativa -->
+    <!-- P2: origem geografica anomala e agravante -->
+    <!-- DEFEITO: tentativa malsucedida nao justifica high -->
+  </rule>
+
+</group>
