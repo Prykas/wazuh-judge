@@ -1,0 +1,17 @@
+<!-- IT-15 | M3 | Mutante | base: IT-09 (S3/100005) -->
+<!-- Defeito semeado: timeframe_implausivel -->
+<!-- timeframe alterado de 600s para 60s -->
+<!-- Resultado: janela de 1 minuto contradiz objetivo de capturar ataques lentos -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100005" level="10" frequency="10" timeframe="60">
+    <if_matched_sid>100001</if_matched_sid>
+    <same_srcip />
+    <description>Bloco 2 - Correlacao: Brute force SSH baixa-e-lenta de IP externo</description>
+    <group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- DEFEITO: timeframe=60s implausivel para ataque "baixa-e-lenta" -->
+    <!-- Regra declara capturar ataques pacientes que escapam janelas curtas -->
+    <!-- mas a janela de 60s e exatamente uma janela curta -->
+  </rule>
+
+</group>
