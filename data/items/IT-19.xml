@@ -1,0 +1,16 @@
+<!-- IT-19 | C2 | Controle | Sem defeito -->
+<!-- Login SSH em conta de sistema — critical correto -->
+<!-- P1: impacto efetivo + P4: conta de sistema = critical -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100021" level="14">
+    <if_sid>5715</if_sid>
+    <user>daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch</user>
+    <description>Login interativo bem-sucedido em conta de sistema sem shell</description>
+    <group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+    <!-- Sem defeito: P1 (impacto efetivo=high) + P4 (conta sistema=+1) = critical -->
+    <!-- Nivel 14 correto pela tabela de decisao -->
+    <!-- C3 = NA: evento unico com impacto imediato, sem necessidade de correlacao -->
+  </rule>
+
+</group>
