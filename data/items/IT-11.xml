@@ -1,0 +1,19 @@
+<!-- IT-11 | S5 | Gerada SBSeg | rule_id: 100010 -->
+<!-- Defeito: severidade_incompativel_superescalonamento -->
+<!-- Nivel 13 (critical) para tentativa viola P1 do proprio Bloco 3 -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100010" level="13">
+    <if_sid>5716</if_sid>
+    <match>root</match>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Bloco 3 - Root: Tentativa de login root de IP externo fora faixas institucionais</description>
+    <group>authentication_failed,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- P1: impacto efetivo pesa mais que tentativa -->
+    <!-- DEFEITO: tentativa (nao sucesso) classificada como critical -->
+    <!-- O proprio Bloco 3 declara P1 como principio -->
+  </rule>
+
+</group>
