@@ -1,0 +1,18 @@
+<!-- IT-13 | M1 | Mutante | base: IT-07 (S1/100001) -->
+<!-- Defeito semeado: if_sid_invertido -->
+<!-- if_sid substituido por 5715 (success) em vez de 5716 (failure) -->
+<!-- Resultado: logica invertida — dispara em logins BEM-SUCEDIDOS -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100001" level="10">
+    <if_sid>5715</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Bloco 1 - Geo: Falha SSH de IP externo fora faixas institucionais</description>
+    <group>authentication_failed,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- DEFEITO: if_sid=5715 corresponde a authentication SUCCESS -->
+    <!-- A descricao diz "falha" mas a logica captura sucessos -->
+  </rule>
+
+</group>
