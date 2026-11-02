@@ -1,0 +1,18 @@
+<!-- IT-08 | S2 | Gerada SBSeg | rule_id: 100003 -->
+<!-- Sem defeito — controle C1 do SBSeg -->
+<!-- Login bem-sucedido + origem anomala = critical correto -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100003" level="13">
+    <if_sid>5715</if_sid>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Bloco 1 - Geo: Login SSH bem-sucedido de IP externo fora faixas institucionais</description>
+    <group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+    <!-- P1: impacto efetivo = high base -->
+    <!-- P2: origem anomala = +1 faixa = critical -->
+    <!-- Sem defeito: nivel 13 correto pela tabela de decisao -->
+  </rule>
+
+</group>
