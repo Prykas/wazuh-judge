@@ -1,0 +1,19 @@
+<!-- IT-17 | M5 | Mutante | base: IT-07 (S1/100001) -->
+<!-- Defeito semeado: negate_removido -->
+<!-- negate="yes" removido do elemento srcip -->
+<!-- Resultado: dispara para QUALQUER IP, inclusive faixas institucionais -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100001" level="10">
+    <if_sid>5716</if_sid>
+    <srcip>192.168.0.0/16</srcip>
+    <srcip>10.0.0.0/8</srcip>
+    <srcip>172.16.0.0/12</srcip>
+    <description>Bloco 1 - Geo: Falha SSH de IP externo fora faixas institucionais</description>
+    <group>authentication_failed,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- DEFEITO: negate removido — srcip agora INCLUI as faixas internas -->
+    <!-- A regra passou a disparar APENAS para IPs institucionais -->
+    <!-- Logica completamente invertida em relacao ao objetivo declarado -->
+  </rule>
+
+</group>
