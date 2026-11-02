@@ -1,0 +1,2630 @@
+{
+  "run_id": "piloto-cal05-rep1",
+  "item_id": "CAL-05",
+  "condition": "E1",
+  "model": "Gemini 2.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra possui sintaxe XML válida, carrega sem erros e inclui todos os campos obrigatórios (<description> e <group>), além de utilizar frequency=\"3\" e timeframe=\"30\" juntos e referenciar a regra pai existente via <if_sid>5401</if_sid>.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<if_sid>5401</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"
+        },
+        {
+          "source": "xml",
+          "quote": "<group>authentication_failed,sudo,brute_force</group>"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A lógica captura adequadamente o comportamento declarado ao herdar os eventos de falha de autenticação do sudo da regra 5401 e exigir a ocorrência no mesmo usuário através da tag <same_user />.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<if_sid>5401</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A",
+      "justification": "A correlação temporal e o limiar estabelecidos são coerentes com o padrão de força bruta/múltiplas falhas, exigindo 3 falhas do mesmo usuário em uma janela de 30 segundos.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "frequency=\"3\" timeframe=\"30\""
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A regra trata de tentativa malsucedida de autenticação (Base = medium). Como há acúmulo de volume/persistência documentado (3 tentativas em 30s), o princípio P3 eleva a severidade em +1 faixa, resultando na faixa esperada 'high' (níveis 9-12). A regra está configurada no nível 8 (faixa 'medium'), resultando em uma distância de 1 faixa em relação ao esperado.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "level=\"8\""
+        },
+        {
+          "source": "xml",
+          "quote": "frequency=\"3\" timeframe=\"30\""
+        }
+      ],
+      "c4_expected_band": "high",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A",
+      "justification": "O potencial de ruído é baixo pois a regra exige 3 falhas repetidas dentro da janela restrita de 30 segundos para o mesmo usuário (<same_user />), diferenciando erros acidentais de digitação de um comportamento anômalo.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        },
+        {
+          "source": "xml",
+          "quote": "frequency=\"3\" timeframe=\"30\""
+        }
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "category": "severity_mismatch",
+      "description": "O nível definido (level=8, faixa medium) está 1 faixa abaixo da faixa esperada (high, níveis 9-12) para tentativas malsucedidas com agravante de volume (P3).",
+      "location": "/group/rule/@level"
+    }
+  ],
+  "meta": {
+    "started_at": "2026-11-02T18:07:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+{
+  "run_id": "piloto-cal05-rep1",
+  "item_id": "CAL-05",
+  "condition": "E1",
+  "model": "GPT-6",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra apresenta estrutura XML consistente, com identificador, nível, descrição e grupo. A referência <if_sid>5401</if_sid> aponta para a regra 5401, presente na cadeia fornecida. Os atributos frequency=\"3\" e timeframe=\"30\" estão configurados conjuntamente. Os campos obrigatórios estão presentes e não há inconsistência estrutural evidente no XML apresentado.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<if_sid>5401</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<rule id=\"5401\" level=\"5\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"
+        },
+        {
+          "source": "xml",
+          "quote": "<group>authentication_failed,sudo,brute_force</group>"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A lógica de correspondência está alinhada ao comportamento declarado. A regra pai identifica falhas de autenticação sudo por meio de <match>authentication failure</match>. A regra avaliada referencia essa condição com <if_sid>5401</if_sid>, exige repetição temporal e utiliza <same_user /> para restringir a correlação ao mesmo usuário. Essas condições são coerentes com a detecção de múltiplas falhas de autenticação e não apresentam over-match ou under-match evidentes em relação ao comportamento descrito.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<match>authentication failure</match>"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: Authentication failure</description>"
+        },
+        {
+          "source": "xml",
+          "quote": "<if_sid>5401</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        },
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A",
+      "justification": "A correlação temporal é necessária para identificar o comportamento de múltiplas falhas declarado na descrição. A regra configura frequency=\"3\" e timeframe=\"30\", estabelecendo um limiar de repetição em uma janela temporal definida. O elemento <same_user /> restringe a correlação ao mesmo usuário, em conformidade com o comportamento alvo. O limiar e a janela são coerentes com a detecção de tentativas repetidas em curto intervalo, sem inadequação evidente nos parâmetros apresentados.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A regra identifica tentativas malsucedidas de autenticação, evidenciadas por <match>authentication failure</match>, cuja severidade base é medium segundo a rubrica. Os atributos frequency=\"3\" e timeframe=\"30\", combinados com <same_user />, documentam repetição de falhas e justificam a aplicação do agravante P3, elevando a severidade esperada para high. Entretanto, a regra configura level=\"8\", pertencente à faixa medium. A distância entre a faixa configurada e a esperada é de uma faixa. Não existem condições explícitas no XML para aplicar os agravantes P2 ou P4.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<match>authentication failure</match>"
+        },
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        },
+        {
+          "source": "xml",
+          "quote": "<group>authentication_failed,sudo,brute_force</group>"
+        }
+      ],
+      "c4_expected_band": "high",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A regra apresenta mecanismos de redução de ruído ao exigir frequency=\"3\" dentro de timeframe=\"30\" e correlacionar os eventos por <same_user />. Entretanto, a condição herdada <match>authentication failure</match> não diferencia falhas legítimas de autenticação de tentativas maliciosas. Dessa forma, erros repetidos de credenciais pelo mesmo usuário podem satisfazer as condições da regra. O potencial de falsos positivos é previsível, porém limitado pelos critérios de frequência, janela temporal e agrupamento.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<match>authentication failure</match>"
+        },
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<same_user />"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"
+        }
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "category": "severity_mismatch",
+      "description": "A severidade configurada é medium (nível 8), enquanto a severidade esperada é high, considerando a base medium para tentativas malsucedidas e o agravante P3 decorrente da repetição documentada por frequency=\"3\", timeframe=\"30\" e <same_user />.",
+      "location": "/group/rule[@id='199006']/@level"
+    },
+    {
+      "category": "false_positive_risk",
+      "description": "A correlação de falhas de autenticação do mesmo usuário pode gerar alertas de possível brute force em situações de erros legítimos e repetidos de credenciais. O XML não apresenta condições adicionais que distingam explicitamente esses eventos de tentativas maliciosas.",
+      "location": "/group/rule[@id='199006']"
+    }
+  ],
+  "meta": {
+    "started_at": "2026-11-02T18:09:48-03:00",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 1,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{
+  "run_id": "piloto-cal05-rep1",
+  "item_id": "CAL-05",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra carrega sem inconsistências evidentes: possui description e group preenchidos, usa frequency e timeframe em conjunto, e o if_sid aponta para a regra 5401, que existe na cadeia pai fornecida. O group da regra repete as categorias da pai e acrescenta brute_force, sem problema estrutural.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199006\" level=\"8\" frequency=\"3\" timeframe=\"30\">"},
+        {"source": "xml", "quote": "<if_sid>5401</if_sid>"},
+        {"source": "xml", "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"},
+        {"source": "xml", "quote": "<rule id=\"5401\" level=\"5\">"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A condição captura corretamente o caso principal: falhas de autenticação sudo (via if_sid 5401, cujo match é 'authentication failure') agrupadas pelo mesmo usuário. Porém, a regra não restringe a origem nem distingue contas privilegiadas, e o mesmo usuário errando a própria senha em sudo algumas vezes (digitação) dispararia o alerta. Variantes como falhas distribuídas entre usuários diferentes (ex.: password spraying) escapariam por causa de same_user.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_sid>5401</if_sid>"},
+        {"source": "xml", "quote": "<same_user />"},
+        {"source": "xml", "quote": "<match>authentication failure</match>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A correlação existe e é coerente: frequency e timeframe estão declarados e same_user agrupa por usuário, adequado ao padrão de múltiplas falhas do mesmo usuário. A ressalva é o threshold de 3 ocorrências em 30 segundos, marginalmente permissivo/sensível para sudo (poucas tentativas de senha incorreta legítimas já atingem 3), e a janela curta pode deixar escapar tentativas lentas. Não há agrupamento por origem (srcip/host), o que seria ideal para distinguir brute force.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"3\" timeframe=\"30\""},
+        {"source": "xml", "quote": "<same_user />"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "O comportamento é tentativa malsucedida (falhas de autenticação), logo base = medium (P1). Há volume/persistência documentados (3 falhas em 30s), o que pela tabela (P3) sobe 1 faixa para high. Não há evidência no XML de origem anômala (P2) nem de conta privilegiada (P4), embora sudo seja contexto de elevação de privilégio, isso não está explicitado na regra. A faixa esperada é high (níveis 9–12); o nível 8 está na faixa medium, a 1 faixa de distância.",
+      "evidence": [
+        {"source": "xml", "quote": "level=\"8\""},
+        {"source": "xml", "quote": "frequency=\"3\" timeframe=\"30\""},
+        {"source": "xml", "quote": "<description>sudo: multiplas falhas de autenticacao do mesmo usuario (possivel brute force)</description>"}
+      ],
+      "c4_expected_band": "high",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "PA",
+      "justification": "Há potencial de ruído em cenários previsíveis mas limitados: erros de digitação de senha no sudo por administradores legítimos podem atingir 3 falhas em 30s para o mesmo usuário. Não há regra filha nível 0 nem exclusão de usuários/serviços esperados visível no XML. Por outro lado, a exigência de 3 falhas correlacionadas limita o volume em comparação com a regra base 5401 isolada.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"3\" timeframe=\"30\""},
+        {"source": "xml", "quote": "<same_user />"}
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "category": "threshold_sensibilidade",
+      "description": "Limiar de 3 falhas em 30s é baixo para sudo e pode gerar alertas por simples erro de digitação de senha, sem distinção de origem ou tipo de conta.",
+      "location": "/group/rule/@frequency, /group/rule/@timeframe"
+    },
+    {
+      "category": "severidade_subdimensionada",
+      "description": "Nível 8 (medium) está uma faixa abaixo do esperado (high) para tentativa malsucedida com volume/persistência documentados (P1 + P3).",
+      "location": "/group/rule/@level"
+    },
+    {
+      "category": "agrupamento_limitado",
+      "description": "Apenas same_user é usado; ausência de agrupamento por origem/host limita a capacidade de distinguir brute force real de erros isolados e deixa escapar varreduras entre usuários distintos.",
+      "location": "/group/rule/same_user"
+    }
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00-03:00",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-01",
+  "condition": "E1",
+  "model": "Gemini 2.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra possui sintaxe XML válida, contém os campos obrigatórios (<description> e <group>) e o atributo if_sid aponta para a regra pai existente 5715.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<rule id=\"199001\" level=\"3\">"
+        },
+        {
+          "source": "xml",
+          "quote": "<if_sid>5715</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<description>Conta de servico autenticada em horario comercial — comportamento esperado</description>"
+        },
+        {
+          "source": "xml",
+          "quote": "<group>authentication_success,service_account,low_priority,</group>"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra utiliza <if_sid>5715</if_sid>, restringe a lista de usuários de serviço com regex em <user> e define a janela temporal de horário comercial em <time>08:00-18:00</time>, capturando adequadamente o comportamento declarado.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<if_sid>5715</if_sid>"
+        },
+        {
+          "source": "xml",
+          "quote": "<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$</user>"
+        },
+        {
+          "source": "xml",
+          "quote": "<time>08:00-18:00</time>"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": false,
+      "label": null,
+      "justification": "A regra trata de evento pontual de autenticação e não utiliza frequency ou timeframe, sendo uma regra simples cujo comportamento alvo não requer correlação temporal acumulada.",
+      "evidence": []
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "Trata-se de autenticação bem-sucedida (impacto efetivo, Base = high). Contudo, trata-se de comportamento esperado em horário comercial com objetivo de baixa prioridade/supressão. Para um evento com impacto efetivo sem agravantes adicionais (ou considerado evento rotineiro esperado para supressão), o nível definido foi 3 (faixa low). Pela tabela estrita, impacto efetivo inicia em high (níveis 9-12), resultando em 2 faixas de distância em relação ao nível 3 (low), mas como o objetivo declarado na descrição é 'comportamento esperado', a classificação em baixa severidade ajusta-se parcialmente, gerando 1 a 2 faixas de distância.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "level=\"3\""
+        },
+        {
+          "source": "xml",
+          "quote": "<description>Conta de servico autenticada em horario comercial — comportamento esperado</description>"
+        }
+      ],
+      "c4_expected_band": "high",
+      "c4_band_distance": 2
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra tem baixo potencial de ruído e atua na categorização de eventos normais, delimitando com precisão as contas de serviço e o horário comercial das 08:00 às 18:00.",
+      "evidence": [
+        {
+          "source": "xml",
+          "quote": "<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$</user>"
+        },
+        {
+          "source": "xml",
+          "quote": "<time>08:00-18:00</time>"
+        }
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "category": "redundancy",
+      "description": "A regra pai 40100 já realiza a supressão (level=0) para login de contas de serviço sem restrição de horário comercial, tornando a regra 199001 parcialmente sobreposta ou redundante.",
+      "location": "/group/rule/@id"
+    }
+  ],
+  "meta": {
+    "started_at": "2026-11-02T19:50:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+&#x20; "run_id": "piloto-v1",\
+&#x20; "item_id": "CAL-01",\
+&#x20; "condition": "E1",\
+&#x20; "model": "GPT-6",\
+&#x20; "rep": 1,\
+&#x20; "criteria": [\
+&#x20;   {\
+&#x20;     "id": "C1",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "O XML apresenta estrutura válida, com grupo externo, identificador, nível, descrição e grupo de classificação. A referência if_sid=5715 é utilizada tanto pela regra avaliada quanto pela regra pai 40100, mas a definição da regra 5715 não foi fornecida. Portanto, sua existência não pode ser confirmada diretamente. Não há atributos frequency ou timeframe que exijam utilização conjunta. Não foram identificadas inconsistências estruturais demonstráveis no XML apresentado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group name=\\"syslog,sshd,acme-lab-cal\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199001\\" level=\\"3\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Conta de servico autenticada em horario comercial — comportamento esperado\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_success,service_account,low_priority,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C2",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "As condições de correspondência estão alinhadas ao comportamento declarado. A regra utiliza if_sid=5715, restringe o usuário a uma lista explícita de contas de serviço e delimita o horário comercial entre 08:00 e 18:00. A descrição corresponde a essas condições. Não há evidência no XML de condição invertida ou de correspondência excessivamente abrangente.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<time>08:00-18:00\</time>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Conta de servico autenticada em horario comercial — comportamento esperado\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C3",\
+&#x20;     "applicable": false,\
+&#x20;     "label": null,\
+&#x20;     "justification": "O comportamento declarado corresponde a uma autenticação individual de conta de serviço durante o horário comercial. A regra não apresenta frequency ou timeframe, e a descrição não estabelece requisito de volume, repetição ou persistência. Portanto, não há necessidade documentada de correlação temporal.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Conta de servico autenticada em horario comercial — comportamento esperado\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<time>08:00-18:00\</time>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199001\\" level=\\"3\\">"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C4",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "I",\
+&#x20;     "justification": "A classificação configurada é low, pois o nível 3 pertence à faixa 1–4. O grupo authentication_success indica autenticação bem-sucedida, caracterizando impacto efetivo para aplicação da tabela de severidade. Assim, a faixa-base esperada é high. A lista de usuários identifica contas de serviço, mas não comprova que todas possuem privilégios elevados; portanto, P4 não é aplicado automaticamente. Não existem condições explícitas de origem externa ou volume para aplicar P2 ou P3. A distância entre high e low é de duas faixas, resultando em classificação inadequada.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199001\\" level=\\"3\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_success,service_account,low_priority,\</group>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Conta de servico autenticada em horario comercial — comportamento esperado\</description>"\
+&#x20;       }\
+&#x20;     ],\
+&#x20;     "c4_expected_band": "high",\
+&#x20;     "c4_band_distance": 2\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C5",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "I",\
+&#x20;     "justification": "A regra avaliada atribui nível 3 a autenticações bem-sucedidas de contas de serviço no horário comercial, comportamento explicitamente descrito como esperado. A cadeia fornecida contém a regra 40100, de nível 0, com a mesma lista de usuários e descrição de supressão, mas sem a restrição temporal presente na regra avaliada. Não há no XML da regra 199001 um mecanismo explícito de supressão equivalente ao nível 0. Como o comportamento corresponde a eventos rotineiros identificados no próprio XML, existe potencial elevado de geração de alertas desnecessários.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199001\\" level=\\"3\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<time>08:00-18:00\</time>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Conta de servico autenticada em horario comercial — comportamento esperado\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"40100\\" level=\\"0\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login de conta de servico em horario comercial — supressao\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   }\
+&#x20; ],\
+&#x20; "problems": [\
+&#x20;   "C1: A existência da regra referenciada pelo if_sid 5715 não pode ser verificada porque seu XML não foi fornecido.",\
+&#x20;   "C4: O nível 3 configura severidade low, duas faixas abaixo da severidade high esperada pela interpretação de autenticação bem-sucedida como impacto efetivo.",\
+&#x20;   "C5: A regra classifica comportamento explicitamente esperado com nível 3, enquanto a regra 40100 documenta tratamento por supressão em nível 0 para as mesmas contas de serviço.",\
+&#x20;   "C5: A regra 40100 não contém a condição temporal presente na regra 199001; o XML fornecido não comprova uma relação de precedência ou supressão entre as duas regras."\
+&#x20; ],\
+&#x20; "meta": {\
+&#x20;   "started_at": "2026-11-02T19:53:00-03:00",\
+&#x20;   "duration_ms": 0,\
+&#x20;   "tokens_in": 0,\
+&#x20;   "tokens_out": 0,\
+&#x20;   "tool_calls": 0,\
+&#x20;   "prompt_hashes": {\
+&#x20;     "system": "E1_single_judge_v1.0"\
+&#x20;   }\
+&#x20; }\
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-01",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra é XML bem formado, com id e level definidos. Tem os campos obrigatórios description e group. Não usa frequency nem timeframe, então não há violação do par. O if_sid 5715 também é usado pela regra pai 40100 da cadeia fornecida, o que é indício de que a regra referenciada existe. O elemento <time> e o regex em <user> são sintaxe válida. Não há inconsistência estrutural no XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199001\" level=\"3\">"},
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"},
+        {"source": "xml", "quote": "<description>Conta de servico autenticada em horario comercial — comportamento esperado</description>"},
+        {"source": "xml", "quote": "<group>authentication_success,service_account,low_priority,</group>"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A regra captura o caso principal declarado: login SSH bem-sucedido (filho de 5715) de uma conta de serviço da lista, entre 08:00 e 18:00. Há over-match e under-match em variantes razoáveis. Não há condição sobre srcip, então um login de conta de serviço vindo de IP externo às faixas 192.168.0.0/16, 10.0.0.0/8 e 172.16.0.0/12 também é classificado como 'comportamento esperado'. A lista fechada de contas deixa de fora outras contas de serviço. O <time> não restringe dias úteis, então fins de semana dentro da faixa horária também casam. Além disso, a regra pai 40100 já cobre o mesmo conjunto de contas sem restrição de horário, o que indica sobreposição de lógica.",
+      "evidence": [
+        {"source": "xml", "quote": "<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$</user>"},
+        {"source": "xml", "quote": "<time>08:00-18:00</time>"},
+        {"source": "xml", "quote": "<description>Conta de servico autenticada em horario comercial — comportamento esperado</description>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": false,
+      "label": null,
+      "justification": "A regra não usa frequency nem timeframe. O comportamento alvo é um evento único de autenticação bem-sucedida, sem necessidade de correlação temporal. Portanto C3 não se aplica.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "I",
+      "justification": "C1 = A, então C4 se aplica. Pela tabela de decisão, o evento é uma autenticação bem-sucedida (impacto efetivo), o que dá base 'high'. O P4 (contas de sistema elevam o risco) sobe 1 faixa, para 'critical'. Não há evidência no XML de P2 (nenhuma condição de srcip) nem de P3 (nenhuma frequency/timeframe), então a faixa esperada é critical (níveis 13–16). A regra usa level 3, faixa 'low', o que dá distância de 3 faixas (low → medium → high → critical). Além disso, o nível baixo contradiz explicitamente o P4, pois rebaixa justamente contas de sistema, e o P1, pois trata um login com sucesso como rotina.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199001\" level=\"3\">"},
+        {"source": "xml", "quote": "<group>authentication_success,service_account,low_priority,</group>"},
+        {"source": "xml", "quote": "<user>^(daemon|nobody|www-data|mysql|postgres|redis|mongodb|elasticsearch)$</user>"}
+      ],
+      "c4_expected_band": "critical",
+      "c4_band_distance": 3
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "PA",
+      "justification": "As condições (lista fechada de contas e janela horária) são relativamente específicas, e a regra assume o papel de reduzir criticidade de eventos rotineiros (low_priority). Ela não suprime o evento: emite alerta nível 3 a cada login de conta de serviço em horário comercial. A regra pai 40100 de nível 0 faz a supressão do mesmo padrão, mas 199001 não é filha dela (usa if_sid 5715), então não herda a supressão. Isso gera ruído de baixo nível previsível e limitado, e as condições não distinguem o anômalo (IP externo) do esperado (IP interno).",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199001\" level=\"3\">"},
+        {"source": "xml", "quote": "<time>08:00-18:00</time>"},
+        {"source": "xml", "quote": "<group>authentication_success,service_account,low_priority,</group>"}
+      ]
+    }
+  ],
+  "problems": [
+    "C2: ausência de condição sobre srcip; login de conta de serviço de IP externo é rotulado 'comportamento esperado'.",
+    "C2/C5: sobreposição com a regra 40100 (mesmas contas, mesmo if_sid 5715), mas 199001 não é filha dela e emite alerta nível 3 em vez de suprimir.",
+    "C4: nível 3 (low) para autenticação bem-sucedida de conta de sistema; esperado critical (high + P4), distância de 3 faixas."
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+Você é avaliador(a) especialista em regras de detecção Wazuh SIEM.
+Sua tarefa é avaliar a regra fornecida segundo os cinco critérios da
+rubrica abaixo.
+
+Regras obrigatórias:
+- Use EXCLUSIVAMENTE o XML da regra, a cadeia de regras pai, o perfil
+  organizacional e a rubrica fornecidos neste contexto.
+- NÃO consulte documentação externa, NÃO presuma comportamento que não
+  possa citar diretamente no XML.
+- Toda afirmação da justificativa DEVE ter evidência: cite o trecho
+  literal do XML que a fundamenta.
+- Preencha justification e evidence ANTES de decidir label.
+- Responda APENAS com JSON válido conforme o schema abaixo.
+- NÃO inclua texto fora do JSON.
+- No campo model preencha com o nome e versão exata do modelo que você é.
+
+---
+
+## PERFIL ORGANIZACIONAL — ACME-LAB
+
+Organização: ACME-LAB
+Setor: financeiro | Porte: médio | SO: Linux/Ubuntu
+Rede interna: 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+Princípios do ruleset:
+- P1: Impacto efetivo pesa mais que tentativa malsucedida.
+- P2: Origem geográfica anômala (IP externo às faixas acima) é agravante.
+- P3: Volume ou persistência documentados são agravantes.
+- P4: Contas privilegiadas ou de sistema elevam o risco.
+
+Faixas de severidade (convenção deste estudo):
+- low:      níveis 1–4
+- medium:   níveis 5–8
+- high:     níveis 9–12
+- critical: níveis 13–16
+
+---
+
+## RUBRICA DE AVALIAÇÃO
+
+Escala: A (Adequado) | PA (Parcialmente Adequado) | I (Inadequado)
+Campo binário: applicable (true/false) — quando false, label = null
+
+### C1 — Correção Estrutural
+applicable: sempre true
+
+Adequado:    Carrega sem erro; campos obrigatórios presentes
+             (description, group); frequency e timeframe usados juntos
+             quando um deles aparece; if_sid aponta para regra existente.
+Parcial:     Carrega com inconsistência não-fatal: group incompleto,
+             description genérica, atributos redundantes sem impacto.
+Inadequado:  Não carrega (XML inválido, if_sid inexistente, frequency
+             sem timeframe, campo obrigatório ausente).
+
+### C2 — Lógica de Correspondência
+applicable: sempre true
+
+Adequado:    Condições capturam o comportamento declarado sem
+             over-match ou under-match evidentes no contexto ACME-LAB.
+Parcial:     Correto para o caso principal; variantes razoáveis
+             escapariam ou eventos legítimos específicos disparariam.
+Inadequado:  Captura tipo errado de evento; negação necessária ausente;
+             lógica invertida; condição tão ampla que captura a maioria
+             dos eventos do tipo.
+
+### C3 — Correlação
+applicable: false quando a regra não usa frequency/timeframe E o
+            comportamento alvo não requer correlação temporal.
+
+Adequado:    frequency, timeframe e campos de agrupamento coerentes
+             com o padrão alvo; threshold equilibra sensibilidade e
+             especificidade.
+Parcial:     Correlação existe e faz sentido, mas com ressalva:
+             threshold marginalmente permissivo/restritivo, janela
+             levemente desalinhada, campo de agrupamento não ideal.
+Inadequado:  Ausente quando o comportamento exige volume; ou parâmetros
+             claramente inadequados (janela temporal implausível para
+             o comportamento declarado).
+             ATENÇÃO: uma janela temporal muito curta para o padrão
+             alvo (ex: 30s para ataques lentos) é Inadequado, não Parcial.
+NA:          Regra simples cujo comportamento alvo não requer
+             correlação temporal — evento único com impacto imediato.
+
+### C4 — Severidade Adequada ao Perfil
+applicable: false quando C1 = I.
+
+Tabela de decisão:
+  Base: tentativa malsucedida → medium | impacto efetivo → high
+  +P2 origem anômala      → sobe 1 faixa
+  +P3 volume/persistência → sobe 1 faixa
+  +P4 conta privilegiada  → sobe 1 faixa
+  Teto: critical
+
+Rótulo pela distância em faixas:
+  0 faixas   → A
+  1 faixa    → PA
+  ≥ 2 faixas → I
+
+### C5 — Tratamento de Ruído
+applicable: false quando o comportamento é tão específico que não há
+            base para estimar volume de falsos positivos.
+
+Adequado:    Baixo potencial de ruído: condições específicas distinguem
+             anômalo de esperado; ou existe regra filha nível 0.
+Parcial:     Pode gerar ruído em cenários previsíveis mas limitados.
+Inadequado:  Dispara em eventos claramente rotineiros sem mecanismo
+             de supressão; volume esperado alto.
+
+---
+
+## CADEIA DE REGRAS PAI
+
+<rule id="5716" level="5">
+  <if_sid>5700</if_sid>
+  <match>^Failed|^error: PAM: Authentication|^error: maximum authentication</match>
+  <description>sshd: authentication failed</description>
+  <group>authentication_failed,</group>
+</rule>
+
+---
+
+## REGRA EM AVALIAÇÃO: CAL-02
+
+```xml
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199002" level="7" frequency="6" timeframe="120">
+    <if_matched_sid>5716</if_matched_sid>
+    <same_srcip />
+    <description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador</description>
+    <group>authentication_failed,brute_force,pci_dss_10.2.4,</group>
+  </rule>
+
+</group>
+```
+
+---
+
+## FORMATO DE SAÍDA
+
+Responda APENAS com o JSON abaixo, sem texto adicional.
+
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-02",
+  "condition": "E1",
+  "model": "PREENCHER_COM_NOME_E_VERSAO_EXATA",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}],
+      "c4_expected_band": "low | medium | high | critical | null",
+      "c4_band_distance": 0
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    }
+  ],
+  "problems": [],
+  "meta": {
+    "started_at": "PREENCHER_COM_DATA_HORA",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+&#x20; "run_id": "piloto-v1",\
+&#x20; "item_id": "CAL-02",\
+&#x20; "condition": "E1",\
+&#x20; "model": "GPT-6",\
+&#x20; "rep": 1,\
+&#x20; "criteria": [\
+&#x20;   {\
+&#x20;     "id": "C1",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "O XML apresenta estrutura válida, com grupo externo, identificador, nível, descrição e grupo de classificação. Os atributos frequency e timeframe são utilizados conjuntamente. A referência de correlação aponta para a regra 5716, explicitamente presente na cadeia fornecida. Não foram identificadas inconsistências estruturais no XML apresentado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group name=\\"syslog,sshd,acme-lab-cal\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199002\\" level=\\"7\\" frequency=\\"6\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>5716\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"5716\\" level=\\"5\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,brute_force,pci_dss_10.2.4,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C2",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A lógica de correspondência está alinhada ao comportamento declarado. A regra correlaciona eventos da regra 5716, cuja descrição identifica falhas de autenticação SSH e cuja condição match contempla mensagens de falha de autenticação. O agrupamento pelo mesmo endereço IP de origem restringe a correspondência a eventos associados à mesma origem. A combinação dessas condições com o limiar de frequência permite identificar repetição de falhas compatível com o comportamento declarado de força bruta SSH.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>5716\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Failed|^error: PAM: Authentication|^error: maximum authentication\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication failed\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199002\\" level=\\"7\\" frequency=\\"6\\" timeframe=\\"120\\">"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C3",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A correlação temporal é necessária para identificar força bruta, pois o comportamento declarado depende da repetição de falhas de autenticação. A regra estabelece frequência de 6 eventos em uma janela de 120 segundos e utiliza same_srcip para correlacionar eventos da mesma origem. O limiar e a janela são coerentes com a identificação de múltiplas tentativas em intervalo limitado, sem evidência no XML de desalinhamento temporal com o padrão declarado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199002\\" level=\\"7\\" frequency=\\"6\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>5716\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C4",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "PA",\
+&#x20;     "justification": "A regra possui nível 7, correspondente à faixa medium. A cadeia de regras pai identifica tentativas malsucedidas de autenticação SSH, estabelecendo medium como severidade-base. A frequência de 6 eventos em 120 segundos documenta volume e justifica a aplicação do agravante P3, elevando a severidade esperada para high. Não há no XML condição que comprove origem externa às redes internas da ACME-LAB ou utilização de conta privilegiada, portanto P2 e P4 não são aplicados. A distância entre a severidade configurada medium e a esperada high é de uma faixa.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199002\\" level=\\"7\\" frequency=\\"6\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication failed\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,\</group>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>5716\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       }\
+&#x20;     ],\
+&#x20;     "c4_expected_band": "high",\
+&#x20;     "c4_band_distance": 1\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C5",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "PA",\
+&#x20;     "justification": "A regra apresenta mecanismos de redução de ruído ao exigir múltiplas falhas de autenticação em uma janela temporal definida e ao correlacionar eventos pelo mesmo IP de origem. Entretanto, a condição da regra pai contempla falhas de autenticação sem distinguir explicitamente tentativas maliciosas de erros legítimos. Assim, sequências de falhas legítimas provenientes do mesmo IP podem satisfazer as condições de correlação. O potencial de ruído é limitado pelo limiar temporal e pelo agrupamento, mas não é eliminado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199002\\" level=\\"7\\" frequency=\\"6\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Failed|^error: PAM: Authentication|^error: maximum authentication\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,\</group>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   }\
+&#x20; ],\
+&#x20; "problems": [\
+&#x20;   "C4: A severidade configurada no nível 7 corresponde a medium, enquanto o volume documentado por frequency=6 e timeframe=120 exige a aplicação de P3, elevando a severidade esperada para high.",\
+&#x20;   "C5: A correlação por mesmo IP e frequência reduz o ruído, mas não distingue explicitamente falhas legítimas repetidas de tentativas maliciosas.",\
+&#x20;   "C2/C3: A janela de 120 segundos contempla apenas repetição dentro desse intervalo; padrões de tentativas mais espaçadas não estão contemplados explicitamente na regra."\
+&#x20; ],\
+&#x20; "meta": {\
+&#x20;   "started_at": "2026-11-02T19:53:00-03:00",\
+&#x20;   "duration_ms": 0,\
+&#x20;   "tokens_in": 0,\
+&#x20;   "tokens_out": 0,\
+&#x20;   "tool_calls": 0,\
+&#x20;   "prompt_hashes": {\
+&#x20;     "system": "E1_single_judge_v1.0"\
+&#x20;   }\
+&#x20; }\
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-02",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra é XML bem formado, com id e level definidos. Tem os campos obrigatórios description e group. Usa frequency e timeframe juntos, atendendo ao requisito do par. O elemento if_matched_sid aponta para 5716, que existe na cadeia de regras pai fornecida. O elemento same_srcip é sintaxe válida. Não há inconsistência estrutural no XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199002\" level=\"7\" frequency=\"6\" timeframe=\"120\">"},
+        {"source": "xml", "quote": "<if_matched_sid>5716</if_matched_sid>"},
+        {"source": "xml", "quote": "<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador</description>"},
+        {"source": "xml", "quote": "<group>authentication_failed,brute_force,pci_dss_10.2.4,</group>"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra encadeia 6 ocorrências da regra 5716 (falha de autenticação SSH) do mesmo srcip, o que corresponde ao comportamento declarado de brute force SSH do mesmo IP. A regra pai 5716 já filtra o tipo de evento (falhas), então não há captura de tipo errado nem negação necessária ausente. O agrupamento por same_srcip evita somar falhas de origens diferentes. Não há over-match ou under-match evidentes no contexto ACME-LAB a partir do XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_matched_sid>5716</if_matched_sid>"},
+        {"source": "xml", "quote": "<same_srcip />"},
+        {"source": "xml", "quote": "<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador</description>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A correlação existe e faz sentido: frequency 6 com timeframe 120 e agrupamento por same_srcip são coerentes com brute force SSH. A ressalva é que a descrição declara 'baixa intensidade', mas a janela de 120 segundos é curta para ataques lentos, que espaçam as tentativas por minutos ou horas e não atingiriam 6 falhas em 2 minutos. O threshold de 6 é razoável, mas a janela está desalinhada com o padrão de baixa intensidade declarado. Pela rubrica, janela muito curta para o padrão alvo pode chegar a Inadequado; aqui a regra ainda cobre o caso principal de brute force (6 falhas em 2 minutos), e o desalinhamento é entre a descrição e a janela, por isso Parcial.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"6\" timeframe=\"120\""},
+        {"source": "xml", "quote": "<same_srcip />"},
+        {"source": "xml", "quote": "<description>SSH brute force de baixa intensidade do mesmo IP — nivel conservador</description>"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "C1 = A, então C4 se aplica. O comportamento é uma tentativa malsucedida (falhas de autenticação), o que dá base 'medium' (P1). O P3 se aplica: a regra documenta volume por frequency 6 em timeframe 120, o que sobe 1 faixa para 'high'. Não há evidência no XML de P2 (nenhuma condição de srcip externo) nem de P4 (nenhuma condição de conta). A faixa esperada é high (níveis 9–12). A regra usa level 7, faixa 'medium', o que dá distância de 1 faixa, portanto PA.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199002\" level=\"7\" frequency=\"6\" timeframe=\"120\">"},
+        {"source": "xml", "quote": "<if_matched_sid>5716</if_matched_sid>"},
+        {"source": "xml", "quote": "<group>authentication_failed,brute_force,pci_dss_10.2.4,</group>"}
+      ],
+      "c4_expected_band": "high",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A exigência de 6 falhas do mesmo IP em 120 segundos distingue o padrão de brute force de falhas isoladas, o que limita o ruído. Porém, não há condição sobre srcip que diferencie origens internas de externas, nem exceção para contas ou hosts conhecidos, e não há regra filha de nível 0 na cadeia fornecida. Cenários previsíveis, como um usuário ou script interno com credencial errada, podem atingir 6 falhas em 2 minutos e gerar alertas de nível 7. O ruído é previsível mas limitado.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"6\" timeframe=\"120\""},
+        {"source": "xml", "quote": "<same_srcip />"}
+      ]
+    }
+  ],
+  "problems": [
+    "C3: janela de 120s desalinhada com a descrição 'baixa intensidade'; ataques lentos escapariam da correlação.",
+    "C4: level 7 (medium) abaixo do esperado high (base medium + P3 por volume documentado), distância de 1 faixa.",
+    "C5: sem diferenciação de srcip interno/externo e sem regra filha nível 0; falhas legítimas repetidas do mesmo IP interno podem disparar a regra."
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tool_calls": 0,
+    "tokens_out": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+Você é avaliador(a) especialista em regras de detecção Wazuh SIEM.
+Sua tarefa é avaliar a regra fornecida segundo os cinco critérios da
+rubrica abaixo.
+
+Regras obrigatórias:
+- Use EXCLUSIVAMENTE o XML da regra, a cadeia de regras pai, o perfil
+  organizacional e a rubrica fornecidos neste contexto.
+- NÃO consulte documentação externa, NÃO presuma comportamento que não
+  possa citar diretamente no XML.
+- Toda afirmação da justificativa DEVE ter evidência: cite o trecho
+  literal do XML que a fundamenta.
+- Preencha justification e evidence ANTES de decidir label.
+- Responda APENAS com JSON válido conforme o schema abaixo.
+- NÃO inclua texto fora do JSON.
+- No campo model preencha com o nome e versão exata do modelo que você é.
+
+---
+
+## PERFIL ORGANIZACIONAL — ACME-LAB
+
+Organização: ACME-LAB
+Setor: financeiro | Porte: médio | SO: Linux/Ubuntu
+Rede interna: 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+Princípios do ruleset:
+- P1: Impacto efetivo pesa mais que tentativa malsucedida.
+- P2: Origem geográfica anômala (IP externo às faixas acima) é agravante.
+- P3: Volume ou persistência documentados são agravantes.
+- P4: Contas privilegiadas ou de sistema elevam o risco.
+
+Faixas de severidade (convenção deste estudo):
+- low:      níveis 1–4
+- medium:   níveis 5–8
+- high:     níveis 9–12
+- critical: níveis 13–16
+
+---
+
+## RUBRICA DE AVALIAÇÃO
+
+Escala: A (Adequado) | PA (Parcialmente Adequado) | I (Inadequado)
+Campo binário: applicable (true/false) — quando false, label = null
+
+### C1 — Correção Estrutural
+applicable: sempre true
+
+Adequado:    Carrega sem erro; campos obrigatórios presentes
+             (description, group); frequency e timeframe usados juntos
+             quando um deles aparece; if_sid aponta para regra existente.
+Parcial:     Carrega com inconsistência não-fatal: group incompleto,
+             description genérica, atributos redundantes sem impacto.
+Inadequado:  Não carrega (XML inválido, if_sid inexistente, frequency
+             sem timeframe, campo obrigatório ausente).
+
+### C2 — Lógica de Correspondência
+applicable: sempre true
+
+Adequado:    Condições capturam o comportamento declarado sem
+             over-match ou under-match evidentes no contexto ACME-LAB.
+Parcial:     Correto para o caso principal; variantes razoáveis
+             escapariam ou eventos legítimos específicos disparariam.
+Inadequado:  Captura tipo errado de evento; negação necessária ausente;
+             lógica invertida; condição tão ampla que captura a maioria
+             dos eventos do tipo.
+
+### C3 — Correlação
+applicable: false quando a regra não usa frequency/timeframe E o
+            comportamento alvo não requer correlação temporal.
+
+Adequado:    frequency, timeframe e campos de agrupamento coerentes
+             com o padrão alvo; threshold equilibra sensibilidade e
+             especificidade.
+Parcial:     Correlação existe e faz sentido, mas com ressalva:
+             threshold marginalmente permissivo/restritivo, janela
+             levemente desalinhada, campo de agrupamento não ideal.
+Inadequado:  Ausente quando o comportamento exige volume; ou parâmetros
+             claramente inadequados (janela temporal implausível para
+             o comportamento declarado).
+             ATENÇÃO: uma janela temporal muito curta para o padrão
+             alvo (ex: 30s para ataques lentos) é Inadequado, não Parcial.
+NA:          Regra simples cujo comportamento alvo não requer
+             correlação temporal — evento único com impacto imediato.
+
+### C4 — Severidade Adequada ao Perfil
+applicable: false quando C1 = I.
+
+Tabela de decisão:
+  Base: tentativa malsucedida → medium | impacto efetivo → high
+  +P2 origem anômala      → sobe 1 faixa
+  +P3 volume/persistência → sobe 1 faixa
+  +P4 conta privilegiada  → sobe 1 faixa
+  Teto: critical
+
+Rótulo pela distância em faixas:
+  0 faixas   → A
+  1 faixa    → PA
+  ≥ 2 faixas → I
+
+### C5 — Tratamento de Ruído
+applicable: false quando o comportamento é tão específico que não há
+            base para estimar volume de falsos positivos.
+
+Adequado:    Baixo potencial de ruído: condições específicas distinguem
+             anômalo de esperado; ou existe regra filha nível 0.
+Parcial:     Pode gerar ruído em cenários previsíveis mas limitados.
+Inadequado:  Dispara em eventos claramente rotineiros sem mecanismo
+             de supressão; volume esperado alto.
+
+---
+
+## CADEIA DE REGRAS PAI
+
+<rule id="5716" level="5">
+  <if_sid>5700</if_sid>
+  <match>^Failed|^error: PAM: Authentication|^error: maximum authentication</match>
+  <description>sshd: authentication failed</description>
+  <group>authentication_failed,</group>
+</rule>
+
+<rule id="100001" level="10">
+  <if_sid>5716</if_sid>
+  <srcip>!192.168.0.0/16</srcip>
+  <srcip>!10.0.0.0/8</srcip>
+  <srcip>!172.16.0.0/12</srcip>
+  <description>Falha SSH de IP externo fora faixas institucionais</description>
+  <group>authentication_failed,external_source,</group>
+</rule>
+
+---
+
+## REGRA EM AVALIAÇÃO: CAL-03
+
+```xml
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199003" level="10" frequency="5" timeframe="120">
+    <if_matched_sid>100001</if_matched_sid>
+    <same_srcip />
+    <description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem</description>
+    <group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,</group>
+  </rule>
+
+</group>
+```
+
+---
+
+## FORMATO DE SAÍDA
+
+Responda APENAS com o JSON abaixo, sem texto adicional.
+
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-03",
+  "condition": "E1",
+  "model": "PREENCHER_COM_NOME_E_VERSAO_EXATA",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}],
+      "c4_expected_band": "low | medium | high | critical | null",
+      "c4_band_distance": 0
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    }
+  ],
+  "problems": [],
+  "meta": {
+    "started_at": "PREENCHER_COM_DATA_HORA",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+&#x20; "run_id": "piloto-v1",\
+&#x20; "item_id": "CAL-03",\
+&#x20; "condition": "E1",\
+&#x20; "model": "GPT-6",\
+&#x20; "rep": 1,\
+&#x20; "criteria": [\
+&#x20;   {\
+&#x20;     "id": "C1",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "O XML apresenta estrutura válida, com grupo externo, identificador, nível, descrição e grupo de classificação. Os atributos frequency e timeframe estão presentes conjuntamente. A referência if_matched_sid aponta para a regra 100001, explicitamente fornecida na cadeia de regras pai. A regra 100001, por sua vez, referencia a regra 5716, também presente no contexto. Não foram identificadas inconsistências estruturais demonstráveis no XML apresentado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group name=\\"syslog,sshd,acme-lab-cal\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199003\\" level=\\"10\\" frequency=\\"5\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>100001\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"100001\\" level=\\"10\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5716\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"5716\\" level=\\"5\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C2",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A lógica de correspondência está alinhada ao comportamento declarado. A regra 5716 identifica falhas de autenticação SSH. A regra intermediária 100001 acrescenta três condições de exclusão das faixas de endereçamento interno da ACME-LAB, restringindo a correspondência a origens externas às redes institucionais. A regra avaliada correlaciona eventos da regra 100001 e utiliza same_srcip para exigir a mesma origem. A combinação dessas condições com frequency=5 e timeframe=120 é compatível com a identificação de múltiplas falhas SSH provenientes de um mesmo IP externo. Não há evidência de lógica invertida ou correspondência excessivamente abrangente.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Failed|^error: PAM: Authentication|^error: maximum authentication\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication failed\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>100001\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199003\\" level=\\"10\\" frequency=\\"5\\" timeframe=\\"120\\">"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C3",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "O comportamento declarado de força bruta exige correlação de múltiplas falhas de autenticação. A regra estabelece frequência de 5 eventos em uma janela de 120 segundos e utiliza same_srcip para agrupar os eventos pelo endereço IP de origem. A referência à regra 100001 mantém o contexto de falhas SSH originadas fora das faixas internas. O limiar, a janela temporal e o agrupamento são coerentes com o padrão declarado de força bruta SSH, sem evidência de inadequação temporal no XML fornecido.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199003\\" level=\\"10\\" frequency=\\"5\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_matched_sid>100001\</if_matched_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Falha SSH de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C4",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "I",\
+&#x20;     "justification": "A regra possui nível 10, correspondente à faixa high. A cadeia de regras pai identifica tentativas malsucedidas de autenticação SSH, estabelecendo medium como severidade-base. As condições de exclusão das três faixas internas documentam origem externa, justificando a aplicação de P2 e elevando a severidade para high. A frequência de 5 eventos em 120 segundos documenta volume, justificando P3 e elevando a severidade esperada para critical. Não há condição explícita de conta privilegiada ou de sistema que justifique P4. A distância entre a severidade configurada high e a esperada critical é de uma faixa, resultando em classificação parcialmente adequada.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199003\\" level=\\"10\\" frequency=\\"5\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication failed\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,\</group>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       }\
+&#x20;     ],\
+&#x20;     "c4_expected_band": "critical",\
+&#x20;     "c4_band_distance": 1\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C5",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A regra apresenta condições específicas que reduzem o potencial de ruído: utiliza eventos de falha de autenticação SSH, restringe a origem a endereços externos às redes institucionais, exige múltiplas ocorrências em uma janela temporal definida e agrupa os eventos pelo mesmo IP de origem. Essas condições distinguem o padrão correlacionado de uma falha isolada de autenticação. Embora não exista regra filha de nível 0 documentada, os filtros presentes fornecem mecanismos suficientes de especificidade para classificar o tratamento de ruído como adequado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Failed|^error: PAM: Authentication|^error: maximum authentication\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199003\\" level=\\"10\\" frequency=\\"5\\" timeframe=\\"120\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<same_srcip />"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   }\
+&#x20; ],\
+&#x20; "problems": [\
+&#x20;   "C4: A regra configura nível 10, correspondente à faixa high, enquanto a combinação de tentativas malsucedidas, origem externa e volume documentado resulta em severidade esperada critical.",\
+&#x20;   "C4: A distância calculada entre a faixa configurada e a esperada é de uma faixa; portanto, o rótulo correto segundo a rubrica é PA.",\
+&#x20;   "C3: A janela de 120 segundos contempla a repetição de eventos nesse intervalo, mas não estabelece correlação para tentativas distribuídas em períodos superiores."\
+&#x20; ],\
+&#x20; "meta": {\
+&#x20;   "started_at": "2026-11-02T19:53:00-03:00",\
+&#x20;   "duration_ms": 0,\
+&#x20;   "tokens_in": 0,\
+&#x20;   "tokens_out": 0,\
+&#x20;   "tool_calls": 0,\
+&#x20;   "prompt_hashes": {\
+&#x20;     "system": "E1_single_judge_v1.0"\
+&#x20;   }\
+&#x20; }\
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-03",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra é XML bem formado, com id e level definidos. Tem os campos obrigatórios description e group. Usa frequency e timeframe juntos, atendendo ao requisito do par. O elemento if_matched_sid aponta para 100001, que existe na cadeia de regras pai fornecida, e essa por sua vez deriva de 5716, também presente. O elemento same_srcip é sintaxe válida. Não há inconsistência estrutural no XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199003\" level=\"10\" frequency=\"5\" timeframe=\"120\">"},
+        {"source": "xml", "quote": "<if_matched_sid>100001</if_matched_sid>"},
+        {"source": "xml", "quote": "<description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem</description>"},
+        {"source": "xml", "quote": "<group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,</group>"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra encadeia 5 ocorrências da regra 100001 (falha SSH de IP fora das faixas institucionais) do mesmo srcip. A regra 100001 já filtra o tipo de evento (falha de autenticação) e a origem externa por negação das três faixas da rede interna, então a negação necessária está presente na cadeia e a regra herda o filtro correto. O agrupamento por same_srcip evita somar falhas de origens diferentes. O comportamento declarado (brute force SSH de IP externo) é capturado sem over-match ou under-match evidentes no contexto ACME-LAB.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_matched_sid>100001</if_matched_sid>"},
+        {"source": "xml", "quote": "<same_srcip />"},
+        {"source": "xml", "quote": "<description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem</description>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A",
+      "justification": "frequency 5 com timeframe 120 e agrupamento por same_srcip são coerentes com brute force SSH de uma mesma origem. O threshold de 5 falhas em 2 minutos equilibra sensibilidade e especificidade: é baixo o bastante para detectar o padrão e exige repetição, o que descarta falhas isoladas. A descrição não declara ataque lento ou de baixa intensidade, então não há desalinhamento entre a janela de 120 segundos e o padrão alvo declarado. O campo de agrupamento é adequado ao padrão.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"5\" timeframe=\"120\""},
+        {"source": "xml", "quote": "<same_srcip />"},
+        {"source": "xml", "quote": "<description>Brute force SSH de IP externo — correlacao correta com agrupamento por origem</description>"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A",
+      "justification": "C1 = A, então C4 se aplica. O comportamento é uma tentativa malsucedida (falhas de autenticação), o que dá base 'medium' (P1). O P2 se aplica: a regra depende de 100001, que filtra IP externo às faixas da rede interna, o que sobe 1 faixa para 'high'. O P3 se aplica: volume documentado por frequency 5 em timeframe 120, o que sobe mais 1 faixa para 'critical'. Não há evidência no XML de P4 (nenhuma condição de conta). A faixa esperada é critical (níveis 13–16). A regra usa level 10, faixa 'high', o que dá distância de 1 faixa, portanto PA.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199003\" level=\"10\" frequency=\"5\" timeframe=\"120\">"},
+        {"source": "xml", "quote": "<if_matched_sid>100001</if_matched_sid>"},
+        {"source": "xml", "quote": "<group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,</group>"}
+      ],
+      "c4_expected_band": "critical",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra combina duas condições que distinguem o anômalo do esperado: origem externa às faixas institucionais (herdada de 100001) e repetição de 5 falhas do mesmo IP em 120 segundos. Falhas isoladas ou originadas na rede interna não disparam a regra. O potencial de ruído é baixo, pois o padrão exige origem externa e volume simultaneamente.",
+      "evidence": [
+        {"source": "xml", "quote": "frequency=\"5\" timeframe=\"120\""},
+        {"source": "xml", "quote": "<same_srcip />"},
+        {"source": "xml", "quote": "<if_matched_sid>100001</if_matched_sid>"}
+      ]
+    }
+  ],
+  "problems": [
+    "C4: level 10 (high) abaixo do esperado critical (base medium + P2 + P3), distância de 1 faixa."
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+Você é avaliador(a) especialista em regras de detecção Wazuh SIEM.
+Sua tarefa é avaliar a regra fornecida segundo os cinco critérios da
+rubrica abaixo.
+
+Regras obrigatórias:
+- Use EXCLUSIVAMENTE o XML da regra, a cadeia de regras pai, o perfil
+  organizacional e a rubrica fornecidos neste contexto.
+- NÃO consulte documentação externa, NÃO presuma comportamento que não
+  possa citar diretamente no XML.
+- Toda afirmação da justificativa DEVE ter evidência: cite o trecho
+  literal do XML que a fundamenta.
+- Preencha justification e evidence ANTES de decidir label.
+- Responda APENAS com JSON válido conforme o schema abaixo.
+- NÃO inclua texto fora do JSON.
+- No campo model preencha com o nome e versão exata do modelo que você é.
+
+---
+
+## PERFIL ORGANIZACIONAL — ACME-LAB
+
+Organização: ACME-LAB
+Setor: financeiro | Porte: médio | SO: Linux/Ubuntu
+Rede interna: 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+Princípios do ruleset:
+- P1: Impacto efetivo pesa mais que tentativa malsucedida.
+- P2: Origem geográfica anômala (IP externo às faixas acima) é agravante.
+- P3: Volume ou persistência documentados são agravantes.
+- P4: Contas privilegiadas ou de sistema elevam o risco.
+
+Faixas de severidade (convenção deste estudo):
+- low:      níveis 1–4
+- medium:   níveis 5–8
+- high:     níveis 9–12
+- critical: níveis 13–16
+
+---
+
+## RUBRICA DE AVALIAÇÃO
+
+Escala: A (Adequado) | PA (Parcialmente Adequado) | I (Inadequado)
+Campo binário: applicable (true/false) — quando false, label = null
+
+### C1 — Correção Estrutural
+applicable: sempre true
+
+Adequado:    Carrega sem erro; campos obrigatórios presentes
+             (description, group); frequency e timeframe usados juntos
+             quando um deles aparece; if_sid aponta para regra existente.
+Parcial:     Carrega com inconsistência não-fatal: group incompleto,
+             description genérica, atributos redundantes sem impacto.
+Inadequado:  Não carrega (XML inválido, if_sid inexistente, frequency
+             sem timeframe, campo obrigatório ausente).
+
+### C2 — Lógica de Correspondência
+applicable: sempre true
+
+Adequado:    Condições capturam o comportamento declarado sem
+             over-match ou under-match evidentes no contexto ACME-LAB.
+Parcial:     Correto para o caso principal; variantes razoáveis
+             escapariam ou eventos legítimos específicos disparariam.
+Inadequado:  Captura tipo errado de evento; negação necessária ausente;
+             lógica invertida; condição tão ampla que captura a maioria
+             dos eventos do tipo.
+
+### C3 — Correlação
+applicable: false quando a regra não usa frequency/timeframe E o
+            comportamento alvo não requer correlação temporal.
+
+Adequado:    frequency, timeframe e campos de agrupamento coerentes
+             com o padrão alvo; threshold equilibra sensibilidade e
+             especificidade.
+Parcial:     Correlação existe e faz sentido, mas com ressalva:
+             threshold marginalmente permissivo/restritivo, janela
+             levemente desalinhada, campo de agrupamento não ideal.
+Inadequado:  Ausente quando o comportamento exige volume; ou parâmetros
+             claramente inadequados (janela temporal implausível para
+             o comportamento declarado).
+             ATENÇÃO: uma janela temporal muito curta para o padrão
+             alvo (ex: 30s para ataques lentos) é Inadequado, não Parcial.
+NA:          Regra simples cujo comportamento alvo não requer
+             correlação temporal — evento único com impacto imediato.
+
+### C4 — Severidade Adequada ao Perfil
+applicable: false quando C1 = I.
+
+Tabela de decisão:
+  Base: tentativa malsucedida → medium | impacto efetivo → high
+  +P2 origem anômala      → sobe 1 faixa
+  +P3 volume/persistência → sobe 1 faixa
+  +P4 conta privilegiada  → sobe 1 faixa
+  Teto: critical
+
+Rótulo pela distância em faixas:
+  0 faixas   → A
+  1 faixa    → PA
+  ≥ 2 faixas → I
+
+### C5 — Tratamento de Ruído
+applicable: false quando o comportamento é tão específico que não há
+            base para estimar volume de falsos positivos.
+
+Adequado:    Baixo potencial de ruído: condições específicas distinguem
+             anômalo de esperado; ou existe regra filha nível 0.
+Parcial:     Pode gerar ruído em cenários previsíveis mas limitados.
+Inadequado:  Dispara em eventos claramente rotineiros sem mecanismo
+             de supressão; volume esperado alto.
+
+---
+
+## CADEIA DE REGRAS PAI
+
+<rule id="5715" level="3">
+  <if_sid>5716</if_sid>
+  <match>^Accepted</match>
+  <description>sshd: authentication success</description>
+  <group>authentication_success,</group>
+</rule>
+
+---
+
+## REGRA EM AVALIAÇÃO: CAL-04
+
+```xml
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199004" level="13">
+    <if_sid>5715</if_sid>
+    <user>root</user>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Login root bem-sucedido de IP externo fora faixas institucionais</description>
+    <group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+  </rule>
+
+</group>
+```
+
+---
+
+## FORMATO DE SAÍDA
+
+Responda APENAS com o JSON abaixo, sem texto adicional.
+
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-04",
+  "condition": "E1",
+  "model": "PREENCHER_COM_NOME_E_VERSAO_EXATA",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}],
+      "c4_expected_band": "low | medium | high | critical | null",
+      "c4_band_distance": 0
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    }
+  ],
+  "problems": [],
+  "meta": {
+    "started_at": "PREENCHER_COM_DATA_HORA",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+&#x20; "run_id": "piloto-v1",\
+&#x20; "item_id": "CAL-04",\
+&#x20; "condition": "E1",\
+&#x20; "model": "GPT-6",\
+&#x20; "rep": 1,\
+&#x20; "criteria": [\
+&#x20;   {\
+&#x20;     "id": "C1",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "O XML apresenta estrutura válida, com grupo externo, identificador, nível, descrição e grupo de classificação. A referência if_sid aponta para a regra 5715, explicitamente fornecida na cadeia de regras pai. A regra não utiliza frequency ou timeframe, portanto não há exigência de utilização conjunta desses atributos. Não foram identificadas inconsistências estruturais demonstráveis na regra avaliada. A referência da regra pai 5715 à regra 5716 não pode ser validada porque o XML da regra 5716 não foi fornecido.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group name=\\"syslog,sshd,acme-lab-cal\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199004\\" level=\\"13\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"5715\\" level=\\"3\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5716\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login root bem-sucedido de IP externo fora faixas institucionais\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C2",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "As condições da regra avaliada correspondem ao comportamento declarado de autenticação SSH bem-sucedida da conta root com origem externa às faixas institucionais. A regra pai 5715 identifica autenticação bem-sucedida por meio da condição de correspondência ^Accepted. A regra avaliada restringe o usuário a root e apresenta três condições de exclusão das redes internas definidas no perfil ACME-LAB. Essas condições são coerentes com o comportamento descrito e não apresentam evidência explícita de correspondência excessivamente ampla ou lógica invertida.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication success\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login root bem-sucedido de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C3",\
+&#x20;     "applicable": false,\
+&#x20;     "label": null,\
+&#x20;     "justification": "O comportamento declarado corresponde a um único login bem-sucedido da conta root com origem externa às faixas institucionais. A regra não utiliza frequency ou timeframe, e sua descrição não estabelece requisito de repetição, volume ou persistência. Como o evento individual já representa autenticação bem-sucedida de uma conta privilegiada a partir de origem externa, não há necessidade documentada de correlação temporal.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199004\\" level=\\"13\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login root bem-sucedido de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C4",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A regra possui nível 13, correspondente à faixa critical. A regra pai identifica autenticação bem-sucedida, caracterizando impacto efetivo e estabelecendo high como severidade-base conforme P1. As condições de exclusão das três faixas internas documentam origem externa, justificando P2 e elevando a severidade para critical. A condição user=root identifica conta privilegiada, justificando P4, mas a severidade permanece em critical devido ao teto definido na rubrica. Não há frequência ou persistência documentada para aplicar P3. A severidade configurada e a esperada pertencem à mesma faixa, resultando em distância zero.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199004\\" level=\\"13\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication success\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       }\
+&#x20;     ],\
+&#x20;     "c4_expected_band": "critical",\
+&#x20;     "c4_band_distance": 0\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C5",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A regra apresenta condições específicas que reduzem o potencial de ruído. A correspondência exige autenticação bem-sucedida, restringe o usuário à conta root e exclui explicitamente as três faixas de endereçamento interno da ACME-LAB. A combinação dessas condições distingue o comportamento monitorado de autenticações bem-sucedidas genéricas e de acessos originados nas redes institucionais. Embora não exista mecanismo explícito de supressão por regra filha de nível 0, a especificidade das condições atende ao critério de baixo potencial de ruído previsto na rubrica.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login root bem-sucedido de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   }\
+&#x20; ],\
+&#x20; "problems": [\
+&#x20;   "C1: A regra pai 5715 referencia a regra 5716, cujo XML não foi fornecido; portanto, a integridade completa da cadeia de dependências não pode ser confirmada.",\
+&#x20;   "C2: O grupo privilege_escalation está presente na classificação, mas o XML demonstra autenticação bem-sucedida da conta root, não uma operação explícita de elevação de privilégios."\
+&#x20; ],\
+&#x20; "meta": {\
+&#x20;   "started_at": "2026-11-02T19:53:00-03:00",\
+&#x20;   "duration_ms": 0,\
+&#x20;   "tokens_in": 0,\
+&#x20;   "tokens_out": 0,\
+&#x20;   "tool_calls": 0,\
+&#x20;   "prompt_hashes": {\
+&#x20;     "system": "E1_single_judge_v1.0"\
+&#x20;   }\
+&#x20; }\
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-04",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra é XML bem formado, com id e level definidos. Tem os campos obrigatórios description e group. Não usa frequency nem timeframe, então não há violação do par. O if_sid aponta para 5715, que existe na cadeia de regras pai fornecida. Os elementos user e srcip são sintaxe válida. Não há inconsistência estrutural no XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199004\" level=\"13\">"},
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"},
+        {"source": "xml", "quote": "<description>Login root bem-sucedido de IP externo fora faixas institucionais</description>"},
+        {"source": "xml", "quote": "<group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,</group>"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra captura o comportamento declarado: login SSH bem-sucedido (filho de 5715, que casa '^Accepted') da conta root, com origem fora das três faixas da rede interna do perfil ACME-LAB. O tipo de evento está correto (sucesso, não falha), a conta é a declarada e a negação das faixas internas está presente, uma por faixa, cobrindo 192.168.0.0/16, 10.0.0.0/8 e 172.16.0.0/12. Não há over-match ou under-match evidentes a partir do XML para o comportamento declarado.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"},
+        {"source": "xml", "quote": "<user>root</user>"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<srcip>!10.0.0.0/8</srcip>"},
+        {"source": "xml", "quote": "<srcip>!172.16.0.0/12</srcip>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": false,
+      "label": null,
+      "justification": "A regra não usa frequency nem timeframe. O comportamento alvo é um único login root bem-sucedido de origem externa, com impacto imediato, e não requer correlação temporal. Portanto C3 não se aplica.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199004\" level=\"13\">"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A",
+      "justification": "C1 = A, então C4 se aplica. O evento é uma autenticação bem-sucedida (impacto efetivo, P1), o que dá base 'high'. O P2 se aplica: a regra exige origem fora das faixas internas, o que sobe 1 faixa para 'critical'. O P4 também se aplica, pois a conta é root, mas o teto é critical e não há faixa adicional. O P3 não se aplica, pois não há frequency/timeframe. A faixa esperada é critical (níveis 13–16). A regra usa level 13, que está na faixa critical, o que dá distância 0.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199004\" level=\"13\">"},
+        {"source": "xml", "quote": "<user>root</user>"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<group>authentication_success,privilege_escalation,pci_dss_10.2.5,gdpr_IV_32.2,</group>"}
+      ],
+      "c4_expected_band": "critical",
+      "c4_band_distance": 0
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra combina três condições específicas: login bem-sucedido, conta root e origem externa às faixas institucionais. Essa combinação distingue o anômalo do esperado, pois logins root vindos da rede interna não disparam. O potencial de ruído é baixo, e o volume esperado de eventos que atendem às três condições simultaneamente também é baixo.",
+      "evidence": [
+        {"source": "xml", "quote": "<user>root</user>"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"}
+      ]
+    }
+  ],
+  "problems": [
+    "C1/C2: o grupo 'privilege_escalation' não corresponde exatamente ao evento (login root bem-sucedido), mas não altera o carregamento nem a correspondência da regra.",
+    "NOTA DE CORREÇÃO sobre CAL-03: o rótulo de C4 foi registrado como 'A', mas a justificativa e c4_band_distance=1 (level 10 vs critical) implicam 'PA'. O rótulo correto de C4 em CAL-03 é 'PA'."
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+Você é avaliador(a) especialista em regras de detecção Wazuh SIEM.
+Sua tarefa é avaliar a regra fornecida segundo os cinco critérios da
+rubrica abaixo.
+
+Regras obrigatórias:
+- Use EXCLUSIVAMENTE o XML da regra, a cadeia de regras pai, o perfil
+  organizacional e a rubrica fornecidos neste contexto.
+- NÃO consulte documentação externa, NÃO presuma comportamento que não
+  possa citar diretamente no XML.
+- Toda afirmação da justificativa DEVE ter evidência: cite o trecho
+  literal do XML que a fundamenta.
+- Preencha justification e evidence ANTES de decidir label.
+- Responda APENAS com JSON válido conforme o schema abaixo.
+- NÃO inclua texto fora do JSON.
+- No campo model preencha com o nome e versão exata do modelo que você é.
+
+---
+
+## PERFIL ORGANIZACIONAL — ACME-LAB
+
+Organização: ACME-LAB
+Setor: financeiro | Porte: médio | SO: Linux/Ubuntu
+Rede interna: 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+Princípios do ruleset:
+- P1: Impacto efetivo pesa mais que tentativa malsucedida.
+- P2: Origem geográfica anômala (IP externo às faixas acima) é agravante.
+- P3: Volume ou persistência documentados são agravantes.
+- P4: Contas privilegiadas ou de sistema elevam o risco.
+
+Faixas de severidade (convenção deste estudo):
+- low:      níveis 1–4
+- medium:   níveis 5–8
+- high:     níveis 9–12
+- critical: níveis 13–16
+
+---
+
+## RUBRICA DE AVALIAÇÃO
+
+Escala: A (Adequado) | PA (Parcialmente Adequado) | I (Inadequado)
+Campo binário: applicable (true/false) — quando false, label = null
+
+### C1 — Correção Estrutural
+applicable: sempre true
+
+Adequado:    Carrega sem erro; campos obrigatórios presentes
+             (description, group); frequency e timeframe usados juntos
+             quando um deles aparece; if_sid aponta para regra existente.
+Parcial:     Carrega com inconsistência não-fatal: group incompleto,
+             description genérica, atributos redundantes sem impacto.
+Inadequado:  Não carrega (XML inválido, if_sid inexistente, frequency
+             sem timeframe, campo obrigatório ausente).
+
+### C2 — Lógica de Correspondência
+applicable: sempre true
+
+Adequado:    Condições capturam o comportamento declarado sem
+             over-match ou under-match evidentes no contexto ACME-LAB.
+Parcial:     Correto para o caso principal; variantes razoáveis
+             escapariam ou eventos legítimos específicos disparariam.
+Inadequado:  Captura tipo errado de evento; negação necessária ausente;
+             lógica invertida; condição tão ampla que captura a maioria
+             dos eventos do tipo.
+
+### C3 — Correlação
+applicable: false quando a regra não usa frequency/timeframe E o
+            comportamento alvo não requer correlação temporal.
+
+Adequado:    frequency, timeframe e campos de agrupamento coerentes
+             com o padrão alvo; threshold equilibra sensibilidade e
+             especificidade.
+Parcial:     Correlação existe e faz sentido, mas com ressalva:
+             threshold marginalmente permissivo/restritivo, janela
+             levemente desalinhada, campo de agrupamento não ideal.
+Inadequado:  Ausente quando o comportamento exige volume; ou parâmetros
+             claramente inadequados (janela temporal implausível para
+             o comportamento declarado).
+             ATENÇÃO: uma janela temporal muito curta para o padrão
+             alvo (ex: 30s para ataques lentos) é Inadequado, não Parcial.
+NA:          Regra simples cujo comportamento alvo não requer
+             correlação temporal — evento único com impacto imediato.
+
+### C4 — Severidade Adequada ao Perfil
+applicable: false quando C1 = I.
+
+Tabela de decisão:
+  Base: tentativa malsucedida → medium | impacto efetivo → high
+  +P2 origem anômala      → sobe 1 faixa
+  +P3 volume/persistência → sobe 1 faixa
+  +P4 conta privilegiada  → sobe 1 faixa
+  Teto: critical
+
+Rótulo pela distância em faixas:
+  0 faixas   → A
+  1 faixa    → PA
+  ≥ 2 faixas → I
+
+### C5 — Tratamento de Ruído
+applicable: false quando o comportamento é tão específico que não há
+            base para estimar volume de falsos positivos.
+
+Adequado:    Baixo potencial de ruído: condições específicas distinguem
+             anômalo de esperado; ou existe regra filha nível 0.
+Parcial:     Pode gerar ruído em cenários previsíveis mas limitados.
+Inadequado:  Dispara em eventos claramente rotineiros sem mecanismo
+             de supressão; volume esperado alto.
+
+---
+
+## CADEIA DE REGRAS PAI
+
+<rule id="5715" level="3">
+  <if_sid>5716</if_sid>
+  <match>^Accepted</match>
+  <description>sshd: authentication success</description>
+  <group>authentication_success,</group>
+</rule>
+
+---
+
+## REGRA EM AVALIAÇÃO: CAL-06
+
+```xml
+<group name="syslog,sshd,acme-lab-cal">
+
+  <rule id="199007" level="10">
+    <if_sid>5715</if_sid>
+    <user>!root</user>
+    <srcip>!192.168.0.0/16</srcip>
+    <srcip>!10.0.0.0/8</srcip>
+    <srcip>!172.16.0.0/12</srcip>
+    <description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais</description>
+    <group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,</group>
+  </rule>
+
+</group>
+```
+
+---
+
+## FORMATO DE SAÍDA
+
+Responda APENAS com o JSON abaixo, sem texto adicional.
+
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-06",
+  "condition": "E1",
+  "model": "PREENCHER_COM_NOME_E_VERSAO_EXATA",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "A | PA | I",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C3",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}],
+      "c4_expected_band": "low | medium | high | critical | null",
+      "c4_band_distance": 0
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "A | PA | I | null",
+      "justification": "...",
+      "evidence": [{"source": "xml", "quote": "..."}]
+    }
+  ],
+  "problems": [],
+  "meta": {
+    "started_at": "PREENCHER_COM_DATA_HORA",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tool_calls": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
+{\
+&#x20; "run_id": "piloto-v1",\
+&#x20; "item_id": "CAL-06",\
+&#x20; "condition": "E1",\
+&#x20; "model": "GPT-6",\
+&#x20; "rep": 1,\
+&#x20; "criteria": [\
+&#x20;   {\
+&#x20;     "id": "C1",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "A",\
+&#x20;     "justification": "A regra apresenta estrutura XML válida, identificador, nível, descrição e grupo de classificação. A referência if_sid aponta para a regra 5715, explicitamente fornecida na cadeia de regras pai. A ausência de frequency e timeframe é estruturalmente consistente, pois nenhum desses atributos foi utilizado. Não foram identificadas inconsistências estruturais na regra avaliada. A referência da regra pai 5715 à regra 5716 não pode ser validada integralmente porque a definição da regra 5716 não foi fornecida.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group name=\\"syslog,sshd,acme-lab-cal\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199007\\" level=\\"10\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"5715\\" level=\\"3\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5716\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,\</group>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C2",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "PA",\
+&#x20;     "justification": "A regra utiliza a referência à regra 5715, cuja condição ^Accepted identifica autenticação SSH bem-sucedida. As três condições srcip excluem as redes internas definidas no perfil ACME-LAB, correspondendo à origem externa declarada. Entretanto, a condição de usuário apenas exclui root, enquanto a descrição afirma detectar usuários comuns. O XML não estabelece uma lista positiva de usuários comuns nem exclui outras contas privilegiadas ou de sistema. Portanto, a regra atende ao caso principal, mas apresenta possibilidade de correspondência excessiva para contas não-root que não sejam usuários comuns.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication success\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>!root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C3",\
+&#x20;     "applicable": false,\
+&#x20;     "label": null,\
+&#x20;     "justification": "O comportamento declarado corresponde a uma autenticação SSH bem-sucedida individual, realizada por usuário não-root com origem externa às faixas institucionais. A regra não apresenta frequency ou timeframe, e sua descrição não exige repetição, volume ou persistência. Como o evento individual já representa autenticação bem-sucedida, não há necessidade de correlação temporal para o comportamento declarado.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199007\\" level=\\"10\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<if_sid>5715\</if_sid>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>!root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C4",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "PA",\
+&#x20;     "justification": "A regra possui nível 10, correspondente à faixa high. A regra pai 5715 documenta autenticação bem-sucedida, caracterizando impacto efetivo e estabelecendo high como severidade-base conforme P1. As três condições srcip excluem explicitamente as redes internas da ACME-LAB, justificando a aplicação de P2 e elevando a severidade esperada para critical. A condição !root não comprova conta privilegiada ou de sistema, portanto P4 não é aplicado. Não há volume ou persistência documentados para aplicar P3. A distância entre a severidade configurada high e a esperada critical é de uma faixa.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199007\\" level=\\"10\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>sshd: authentication success\</description>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>!root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       }\
+&#x20;     ],\
+&#x20;     "c4_expected_band": "critical",\
+&#x20;     "c4_band_distance": 1\
+&#x20;   },\
+&#x20;   {\
+&#x20;     "id": "C5",\
+&#x20;     "applicable": true,\
+&#x20;     "label": "PA",\
+&#x20;     "justification": "A regra reduz o potencial de ruído ao exigir autenticação bem-sucedida, excluir a conta root e restringir a origem a endereços fora das faixas internas da ACME-LAB. Entretanto, a condição !root contempla qualquer usuário diferente de root, sem distinguir explicitamente contas comuns de outras contas. Além disso, não há restrição adicional de horário ou mecanismo explícito de supressão na regra avaliada. Assim, autenticações legítimas de usuários não-root provenientes de endereços externos podem satisfazer as condições, produzindo ruído em cenários previsíveis, embora limitado pelos filtros de origem e autenticação.",\
+&#x20;     "evidence": [\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<match>^Accepted\</match>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<user>!root\</user>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!192.168.0.0/16\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!10.0.0.0/8\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<srcip>!172.16.0.0/12\</srcip>"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<rule id=\\"199007\\" level=\\"10\\">"\
+&#x20;       },\
+&#x20;       {\
+&#x20;         "source": "xml",\
+&#x20;         "quote": "\<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais\</description>"\
+&#x20;       }\
+&#x20;     ]\
+&#x20;   }\
+&#x20; ],\
+&#x20; "problems": [\
+&#x20;   "C1: A regra pai 5715 referencia a regra 5716, cuja definição não foi fornecida; a integridade completa da cadeia não pode ser confirmada.",\
+&#x20;   "C2: A condição \<user>!root\</user> exclui apenas root e não garante que a autenticação pertença a um usuário comum, como declarado na descrição.",\
+&#x20;   "C4: A severidade configurada no nível 10 corresponde a high, enquanto o impacto efetivo combinado com origem externa resulta em severidade esperada critical.",\
+&#x20;   "C5: Autenticações legítimas de contas não-root provenientes de endereços externos podem gerar alertas, pois não há condições adicionais de distinção ou supressão no XML apresentado."\
+&#x20; ],\
+&#x20; "meta": {\
+&#x20;   "started_at": "2026-11-02T19:53:00-03:00",\
+&#x20;   "duration_ms": 0,\
+&#x20;   "tokens_in": 0,\
+&#x20;   "tokens_out": 0,\
+&#x20;   "tool_calls": 0,\
+&#x20;   "prompt_hashes": {\
+&#x20;     "system": "E1_single_judge_v1.0"\
+&#x20;   }\
+&#x20; }\
+}
+{
+  "run_id": "piloto-v1",
+  "item_id": "CAL-06",
+  "condition": "E1",
+  "model": "Claude Sonnet 5.5",
+  "rep": 1,
+  "criteria": [
+    {
+      "id": "C1",
+      "applicable": true,
+      "label": "A",
+      "justification": "A regra é XML bem formado, com id e level definidos. Tem os campos obrigatórios description e group. Não usa frequency nem timeframe, então não há violação do par. O if_sid aponta para 5715, que existe na cadeia de regras pai fornecida. Os elementos user (com negação) e srcip são sintaxe válida. Não há inconsistência estrutural no XML.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199007\" level=\"10\">"},
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"},
+        {"source": "xml", "quote": "<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais</description>"},
+        {"source": "xml", "quote": "<group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,</group>"}
+      ]
+    },
+    {
+      "id": "C2",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A regra captura o caso principal declarado: login SSH bem-sucedido (filho de 5715, que casa '^Accepted') de usuário que não seja root, com origem fora das três faixas da rede interna. O tipo de evento está correto e as negações de srcip cobrem as três faixas do perfil. A ressalva está em <user>!root</user>: a descrição fala em 'usuario comum', mas a condição exclui apenas root e, portanto, também casa contas de sistema (daemon, www-data, postgres etc., que a regra pai 40100 de outro item trata como contas de serviço). Essas contas não são 'usuario comum', e um login delas de IP externo é capturado como se fosse de usuário comum. Há over-match em relação à descrição declarada, mas o comportamento principal é capturado corretamente.",
+      "evidence": [
+        {"source": "xml", "quote": "<if_sid>5715</if_sid>"},
+        {"source": "xml", "quote": "<user>!root</user>"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<srcip>!10.0.0.0/8</srcip>"},
+        {"source": "xml", "quote": "<srcip>!172.16.0.0/12</srcip>"},
+        {"source": "xml", "quote": "<description>Login SSH bem-sucedido de usuario comum de IP externo fora faixas institucionais</description>"}
+      ]
+    },
+    {
+      "id": "C3",
+      "applicable": false,
+      "label": null,
+      "justification": "A regra não usa frequency nem timeframe. O comportamento alvo é um único login bem-sucedido de origem externa, com impacto imediato, e não requer correlação temporal. Portanto C3 não se aplica.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199007\" level=\"10\">"}
+      ]
+    },
+    {
+      "id": "C4",
+      "applicable": true,
+      "label": "PA",
+      "justification": "C1 = A, então C4 se aplica. O evento é uma autenticação bem-sucedida (impacto efetivo, P1), o que dá base 'high'. O P2 se aplica: a regra exige origem fora das faixas internas, o que sobe 1 faixa para 'critical'. O P3 não se aplica, pois não há frequency/timeframe. O P4 não se aplica de forma explícita: <user>!root</user> exclui a conta privilegiada, e não há condição que restrinja a contas de sistema. A faixa esperada é critical (níveis 13–16). A regra usa level 10, faixa 'high', o que dá distância de 1 faixa, portanto PA.",
+      "evidence": [
+        {"source": "xml", "quote": "<rule id=\"199007\" level=\"10\">"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<user>!root</user>"},
+        {"source": "xml", "quote": "<group>authentication_success,external_source,pci_dss_10.2.5,gdpr_IV_32.2,</group>"}
+      ],
+      "c4_expected_band": "critical",
+      "c4_band_distance": 1
+    },
+    {
+      "id": "C5",
+      "applicable": true,
+      "label": "PA",
+      "justification": "A combinação de login bem-sucedido e origem externa às faixas institucionais distingue o anômalo do rotineiro interno, e logins da rede interna não disparam. Porém, <user>!root</user> é uma condição muito ampla: qualquer outra conta casa. Cenários previsíveis, como colaboradores em home office ou acesso remoto legítimo, e contas de serviço com acesso externo autorizado, dispararão alertas de nível 10 sem mecanismo de supressão. Não há regra filha de nível 0 na cadeia fornecida e não há lista de usuários ou origens esperadas. O ruído é previsível, mas limitado à origem externa.",
+      "evidence": [
+        {"source": "xml", "quote": "<user>!root</user>"},
+        {"source": "xml", "quote": "<srcip>!192.168.0.0/16</srcip>"},
+        {"source": "xml", "quote": "<rule id=\"199007\" level=\"10\">"}
+      ]
+    }
+  ],
+  "problems": [
+    "C2: <user>!root</user> é mais amplo que 'usuario comum' da descrição; contas de sistema também casam.",
+    "C4: level 10 (high) abaixo do esperado critical (base high + P2), distância de 1 faixa.",
+    "C5: sem mecanismo de supressão para acessos externos legítimos (ex.: acesso remoto de colaboradores); alerta de nível 10 a cada login externo bem-sucedido de qualquer conta não-root."
+  ],
+  "meta": {
+    "started_at": "2026-11-02T00:00:00Z",
+    "duration_ms": 0,
+    "tokens_in": 0,
+    "tool_calls": 0,
+    "tokens_out": 0,
+    "prompt_hashes": {
+      "system": "E1_single_judge_v1.0"
+    }
+  }
+}
