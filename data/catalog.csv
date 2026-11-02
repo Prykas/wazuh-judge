@@ -1,0 +1,17 @@
+item_id,pseudonym,rule_id,category,defect_category,defect_description,defect_location,evidence_source,evidence_detail
+IT-01,N1,5715,nativas_wazuh,ruido_sem_supressao,Regra dispara em logins institucionais legitimos sem regra filha nivel 0 para supressao,atributo level,replay,197/198 disparos com manual=nenhum
+IT-01,N1,5715,nativas_wazuh,severidade_incompativel_subestimacao,Nivel 3 (low) para login bem-sucedido nao reflete risco real no perfil ACME-LAB,atributo level,replay,197/198 disparos rotineiros sem alerta de valor
+IT-02,N2,5710,nativas_wazuh,severidade_incompativel_superescalonamento,Nivel 5 (medium) para tentativa isolada com usuario inexistente viola P1,atributo level,replay,92/339 disparos com manual=baixo
+IT-02,N2,5710,nativas_wazuh,ruido_sem_supressao,Sem mecanismo de supressao para tentativas isoladas de baixo valor,atributo level,replay,247/339 disparos com manual=nenhum
+IT-03,N3,5402,nativas_wazuh,severidade_incompativel_subestimacao,Nivel 3 (low) para sudo a root efetivo contradiz P1 e P4,atributo level,replay,2/2 disparos com manual=alto
+IT-04,N4,5403,nativas_wazuh,severidade_incompativel_subestimacao,Nivel 4 (low) para primeiro uso de sudo contradiz P4 (conta privilegiada),atributo level,replay,1/1 disparos com manual=alto
+IT-05,N5,5501,nativas_wazuh,ruido_sem_supressao,Regra dispara em sessoes CRON de root sem qualquer valor operacional,atributo level,replay,34/34 disparos com manual=nenhum
+IT-07,S1,100001,geradas_sbseg,severidade_incompativel_superescalonamento,Nivel 10 (high) para tentativa malsucedida por criterio geografico viola P1,atributo level,xml,Bloco 1 declara P1 como principio; tentativa nao e impacto efetivo
+IT-09,S3,100005,geradas_sbseg,correlacao_campo_agrupamento_ausente,Ausencia de same_srcip permite contar falhas de multiplas origens distintas,elemento same_srcip ausente,xml,Regra de brute force single-source sem restricao de origem
+IT-10,S4,100007,geradas_sbseg,correlacao_sem_garantia_temporal,if_matched_sid com if_sid nao garante ordem cronologica no motor Wazuh,elementos if_matched_sid e if_sid,xml,Motor Wazuh nao preserva ordem de eventos entre regras correlacionadas
+IT-11,S5,100010,geradas_sbseg,severidade_incompativel_superescalonamento,Nivel 13 (critical) para tentativa de login root viola P1 do proprio Bloco 3,atributo level,xml,Bloco 3 declara explicitamente P1; tentativa nao e impacto efetivo
+IT-13,M1,100001,mutantes,logica_correspondencia_invertida,if_sid referencia 5715 (authentication success) em vez de 5716/5760 (failure),elemento if_sid,xml,Regra dispara em logins bem-sucedidos em vez de falhas
+IT-14,M2,100005,mutantes,correlacao_campo_agrupamento_ausente,same_srcip removido: conta 10 falhas de qualquer conjunto de origens,elemento same_srcip ausente,xml,Campo de agrupamento essencial para brute force single-source removido
+IT-15,M3,100005,mutantes,correlacao_janela_temporal_inadequada,timeframe=60s contradiz objetivo de capturar ataques pacientes de baixa velocidade,atributo timeframe,xml,Janela de 1 minuto captura apenas erros consecutivos nao ataques lentos
+IT-16,M4,100010,mutantes,severidade_incompativel_subestimacao,level=5 (medium) para tentativa root externa viola P1 P2 e P4 simultaneamente,atributo level,xml,Reducao de 13 para 5 representa 2 faixas de distancia do esperado
+IT-17,M5,100001,mutantes,logica_correspondencia_over_match,negate removido do srcip: dispara para qualquer IP inclusive institucionais,atributo negate ausente,xml,Criterio geografico eliminado; regra captura eventos legitimos internos
