@@ -1,0 +1,14 @@
+<!-- IT-09 | S3 | Gerada SBSeg | rule_id: 100005 -->
+<!-- Defeito: correlacao_campo_agrupamento_ausente -->
+<!-- Ausencia de same_srcip permite contar falhas de multiplas origens -->
+<group name="syslog,sshd,acme-lab">
+
+  <rule id="100005" level="10" frequency="10" timeframe="600">
+    <if_matched_sid>100001</if_matched_sid>
+    <description>Bloco 2 - Correlacao: Brute force SSH baixa-e-lenta de IP externo</description>
+    <group>authentication_failed,brute_force,external_source,pci_dss_10.2.4,gdpr_IV_35.7.d,</group>
+    <!-- DEFEITO: ausencia de same_srcip permite acumular falhas -->
+    <!-- de origens distintas — nao e brute force single-source -->
+  </rule>
+
+</group>
