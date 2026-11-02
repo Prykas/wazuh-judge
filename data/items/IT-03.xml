@@ -1,0 +1,14 @@
+<!-- IT-03 | N3 | Nativa Wazuh | rule_id: 5402 -->
+<!-- Defeito: severidade_incompativel_subestimacao -->
+<!-- Replay: 2/2 disparos manual=alto -->
+<group name="syslog,sudo,acme-lab">
+
+  <rule id="5402" level="3">
+    <if_sid>5401</if_sid>
+    <match>COMMAND</match>
+    <regex>TTY=\S+ ; PWD=\S+ ; USER=root ; COMMAND=</regex>
+    <description>Successful sudo to ROOT executed</description>
+    <group>pci_dss_10.2.5,pci_dss_10.2.2,gpg13_7.6,gdpr_IV_32.2,hipaa_164.312.b,nist_800_53_AU.14,nist_800_53_AC.7,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,</group>
+  </rule>
+
+</group>
