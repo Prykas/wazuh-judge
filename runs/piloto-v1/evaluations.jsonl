@@ -2,14 +2,14 @@
   "run_id": "piloto-v1",
   "item_id": "CAL-01",
   "condition": "E1",
-  "model": "Gemini 2.5 Flash",
+  "model": "Gemini 2.5",
   "rep": 1,
   "criteria": [
     {
       "id": "C1",
       "applicable": true,
       "label": "A",
-      "justification": "A regra possui XML válido, inclui os campos obrigatórios <description> e <group>, e o atributo if_sid referencia uma regra existente no ecossistema (5715). Não há uso isolado de frequency ou timeframe.",
+      "justification": "A regra possui sintaxe XML válida, carrega sem erro e inclui os campos obrigatórios (<description> e <group>). O atributo if_sid aponta para a regra pai existente 5715 e não há uso incorreto de frequency ou timeframe.",
       "evidence": [
         {
           "source": "xml",
@@ -33,7 +33,7 @@
       "id": "C2",
       "applicable": true,
       "label": "A",
-      "justification": "As condições especificadas capturam com precisão o comportamento declarado de login de conta de serviço em horário comercial, aplicando os filtros de usuário via regex e intervalo de tempo em <time>.",
+      "justification": "As condições capturam exatamente o comportamento declarado: herda a autenticação SSH bem-sucedida de <if_sid>5715</if_sid>, especifica as contas de serviço via regex no elemento <user> e delimita o horário comercial com <time>08:00-18:00</time>.",
       "evidence": [
         {
           "source": "xml",
@@ -53,14 +53,14 @@
       "id": "C3",
       "applicable": false,
       "label": null,
-      "justification": "A regra trata da classificação de um evento pontual de autenticação e não utiliza atributos de janela temporal acumulada ou frequência (frequency/timeframe), enquadrando-se como não aplicável.",
+      "justification": "A regra avalia um evento único e pontual de autenticação e não utiliza atributos de janela temporal ou frequência (frequency/timeframe), enquadrando-se como não aplicável para correlação temporal.",
       "evidence": []
     },
     {
       "id": "C4",
       "applicable": true,
       "label": "I",
-      "justification": "Trata-se de uma autenticação bem-sucedida, que possui Base = high (níveis 9-12). Aplicando o princípio P4 (contas de sistema/serviço), a severidade sobe 1 faixa para critical (níveis 13-16). Como a regra define level=\"3\" (faixa low, níveis 1-4), a distância entre a faixa configurada (low) e a faixa esperada (critical) é de 3 faixas (≥2 faixas), resultando no rótulo Inadequado (I).",
+      "justification": "Trata-se de uma autenticação bem-sucedida (impacto efetivo, Base = high, níveis 9–12). Pelo princípio P4 (contas de sistema/serviço), a severidade é elevada em 1 faixa para critical (níveis 13–16). Como a regra define level=\"3\" (faixa low, níveis 1–4), a distância entre a faixa configurada (low) e a faixa esperada (critical) é de 3 faixas (≥2 faixas), resultando na classificação Inadequado (I).",
       "evidence": [
         {
           "source": "xml",
@@ -78,7 +78,7 @@
       "id": "C5",
       "applicable": true,
       "label": "A",
-      "justification": "O potencial de ruído é baixo pois a regra é restrita a uma lista específica de contas de serviço e limitada estritamente ao horário das 08:00 às 18:00.",
+      "justification": "O potencial de ruído é baixo pois a regra é estritamente restrita à lista de contas de serviço indicadas no regex e limitada ao intervalo de horário comercial entre 08:00 e 18:00.",
       "evidence": [
         {
           "source": "xml",
@@ -94,17 +94,17 @@
   "problems": [
     {
       "category": "redundancy",
-      "description": "A regra pai 40100 já possui nível 0 (supressão) para logins de contas de serviço. Criar uma regra filha de nível 3 re-eleva o nível de alerta para eventos que deveriam ser suprimidos.",
+      "description": "A regra pai 40100 já possui nível 0 (supressão) para logins de contas de serviço. Criar a regra 199001 com nível 3 re-eleva o nível de alerta para um evento destinado à supressão.",
       "location": "/group/rule/@level"
     },
     {
       "category": "severity_mismatch",
-      "description": "O nível atribuído (level=3, faixa low) possui uma distância de 3 faixas em relação à faixa esperada (critical, níveis 13-16) para evento de impacto efetivo (login bem-sucedido) em conta de sistema/serviço (P4).",
+      "description": "O nível atribuído (level=3, faixa low) possui distância de 3 faixas em relação à faixa esperada (critical, níveis 13–16) para evento de impacto efetivo em conta de sistema/serviço (P4).",
       "location": "/group/rule/@level"
     }
   ],
   "meta": {
-    "started_at": "2026-11-02T20:22:00Z",
+    "started_at": "2026-11-02T21:03:00Z",
     "duration_ms": 0,
     "tokens_in": 0,
     "tokens_out": 0,
@@ -113,6 +113,7 @@
       "system": "E1_single_judge_v1.0"
     }
   }
+}
 {
   "run_id": "piloto-v1",
   "item_id": "CAL-01",
